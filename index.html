@@ -382,7 +382,7 @@
             contentEl.innerHTML = `<div class="text-center py-20 font-mono text-slate-500 animate-pulse"><i class="fa-solid fa-spinner fa-spin text-2xl mb-2 text-amber-500 block"></i>Lade Kapitel...</div>`;
 
             try {
-                const res = await fetch(filePath);
+                const res = await fetch(`${filePath}?t=${new Date().getTime()}`);
                 if (!res.ok) throw new Error('Datei nicht gefunden.');
                 const htmlText = await res.text();
                 contentEl.innerHTML = htmlText;
