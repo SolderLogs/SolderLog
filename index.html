@@ -386,6 +386,9 @@
                 if (!res.ok) throw new Error('Datei nicht gefunden.');
                 const htmlText = await res.text();
                 contentEl.innerHTML = htmlText;
+                if (window.MathJax && typeof MathJax.typeset === 'function') {
+                    MathJax.typeset();
+                }
             } catch (err) {
                 contentEl.innerHTML = `<div class="text-center py-20 font-mono text-red-500"><i class="fa-solid fa-triangle-exclamation text-2xl mb-2 block"></i>Kapitel konnte nicht geladen werden (${filePath}).</div>`;
             }
