@@ -6,7 +6,7 @@ In this treasure trove I found a Seeed Xiao ESP32-S3, some solid-core wire, oran
 
 Before I started tinkering, I wanted to understand how capacitive sensing can detect when a sensor is touched. 
 
-In a nutshell, a finger influences the electric field around a sensor. When a finger iapproaches a sensor, it changes the effective capacitance of the sensor. This change can be measured. Tohe relationship between, voltage, and capacitance is described by
+In a nutshell, a finger influences the electric field around a sensor. When a finger approaches a sensor, it changes the effective capacitance of the sensor. This change can be measured. Tohe relationship between, voltage, and capacitance is described by
 
 $$I(t) = C \frac{dV(t)}{dt}$$
 
