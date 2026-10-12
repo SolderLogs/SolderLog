@@ -1,0 +1,6 @@
+{
+  "title": "My Custom Scroll Wheel",
+  "description": "Building a simple capacitive touch input device from scratch. Using basic components found in my drawer",
+  "status": "In Progress",
+  "tags": ["electronics", "soldering", "ESP32"]
+}
