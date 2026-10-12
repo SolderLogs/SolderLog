@@ -15,10 +15,10 @@
     <!-- Hauptüberschrift des Kapitels -->
     <div class="border-b pb-4 dark:border-slate-700">
         <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white">
-            Chapter 1: Capacitance?
+            Chapter 1: Start the testing
         </h2>
         <p class="text-sm text-slate-500 dark:text-slate-400 font-mono mt-1">
-            How does it work, and how can my ESP32 measure it?
+            How to set up a basic sensor and basic code
         </p>
     </div>
 
@@ -29,42 +29,25 @@
         </h3>
 
         <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-            A while ago, I came across a breakout board featuring a capacitive
-            scroll wheel, similar to the one from
-            <a href="https://pcbgadgets.com/index.php?route=product/product&limit=15&product_id=54"
-               target="_blank"
-               rel="noopener noreferrer"
-               class="underline text-amber-600 dark:text-amber-400">
-                PCB Gadgets
-            </a>.
-
-            After a little investigation, I found several different variations
-            of this design. Some had funky, squiggly lines between capacitive
-            pads. This made sense to me, since they could potentially improve
-            finger detection when the finger rested between two pads.
-
-            Since this idea had stayed with me for quite a while, I
-            spontaneously decided this weekend that I wanted to try it myself.
-            So I looked for parts lying around in my tinkering box that might
-            be suitable for my quest.
-
-            In this treasure trove, I found a Seeed XIAO ESP32-S3, some
-            solid-core wire, orange LEDs, resistors, and some copper tape.
-            This was good enough for a start.
+            To get things started, I glued a piece of copper 
+            tape to a 3d-printed square and soldered a wire to it. 
+            I then connected the wire to D0 and a LED in series with a resistor to D1. 
+            Next, I fired up the Arduino IDE to write my first simple test sketch.
+            This sketch  reads the touch value reported by the ESP and prints it to the serial monitor.
         </p>
-        <!-- Bild mit Unterschrift -->
-        <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
-            <img
-                src="scroll-wheel/parts.jpg"
-                alt="parts I found in my drawer"
-                class="w-full h-auto rounded-xl shadow-sm object-cover max-h-96"
-                loading="lazy"
-            >
+        <figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
+                const int TOUCH_PIN = D0;
 
-            <figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
-                📸 Figure 1: all the parts I found in my drawer: Seeed XIAO ESP32-S3, some
-            solid-core wire, orange LEDs, resistors, and some copper tape
-            </figcaption>
+                void setup() {
+                  Serial.begin(115200);
+                }
+
+                void loop() {
+                  int touchValue = touchRead(TOUCH_PIN);
+                  Serial.println(touchValue);
+                  delay(50);
+                }
+        </figcaption>
         </figure>
     </section>
 
