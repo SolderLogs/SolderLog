@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="de" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SolderLog | Electronics & Tinkering Projects</title>
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Marked.js for real-time Markdown parsing -->
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -68,11 +66,11 @@
             </a>
 
             <div class="flex items-center gap-3">
-                <button onclick="loadProjectsFromGitHub()" class="px-3 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-amber-200 dark:hover:bg-slate-700 text-slate-800 dark:text-amber-400 font-bold rounded-xl text-xs font-mono transition-all flex items-center gap-2 border border-slate-300 dark:border-slate-700" title="Refresh Projects">
+                <button onclick="loadProjectsFromGitHub()" class="px-3 py-2 bg-slate-200 dark:bg-slate-800 hover:bg-amber-200 dark:hover:bg-slate-700 text-slate-800 dark:text-amber-400 font-bold rounded-xl text-xs font-mono transition-all flex items-center gap-2 border border-slate-300 dark:border-slate-700" title="Projekte aktualisieren">
                     <i class="fa-solid fa-rotate"></i>
                     <span class="hidden sm:inline">Reload</span>
                 </button>
-                <button id="themeToggle" class="w-10 h-10 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-amber-400 flex items-center justify-center hover:scale-105 transition-all border border-slate-300 dark:border-slate-700" title="Switch color scheme">
+                <button id="themeToggle" class="w-10 h-10 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-amber-400 flex items-center justify-center hover:scale-105 transition-all border border-slate-300 dark:border-slate-700" title="Design wechseln">
                     <i class="fa-solid fa-moon dark:hidden"></i>
                     <i class="fa-solid fa-sun hidden dark:block"></i>
                 </button>
@@ -99,23 +97,14 @@
                 </div>
                 <div class="flex-1 text-center md:text-left space-y-3">
                     <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 text-xs font-mono font-bold border border-amber-300 dark:border-amber-700/50">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i> Beginner Workshop & Notebook
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Maker Workshop & Notizbuch
                     </div>
                     <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
-                        Learning Electronics & Tinkering 🛠️
+                        Elektronik & Bastel-Projekte 🛠️
                     </h1>
                     <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl">
-                        Welcome to my blog! Here, I document, step by step, my attempts, short circuits, and successes in soldering, building circuits, and tinkering. No perfection, just the joy of experimenting!
+                        Willkommen auf meinem Tagebuch! Hier dokumentiere ich Schritt für Schritt meine Versuche, Schaltungen und Erfolge beim Löten und Tüfteln.
                     </p>
-
-                    <div class="pt-2 flex flex-wrap justify-center md:justify-start gap-2 text-xs font-mono">
-                        <span class="px-2.5 py-1 bg-slate-100 dark:bg-slate-700/70 rounded-lg border border-slate-200 dark:border-slate-600">
-                            <i class="fa-solid fa-temperature-arrow-up text-red-500 mr-1"></i> Soldering Iron: Ready
-                        </span>
-                        <span class="px-2.5 py-1 bg-slate-100 dark:bg-slate-700/70 rounded-lg border border-slate-200 dark:border-slate-600">
-                            <i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i> Spark danger: Low
-                        </span>
-                    </div>
                 </div>
             </div>
         </section>
@@ -125,10 +114,10 @@
             <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white/60 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
                 <div class="relative w-full sm:w-72">
                     <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
-                    <input type="text" id="searchInput" oninput="filterProjects()" placeholder="Search projects or chapters..." class="w-full pl-9 pr-4 py-2 bg-white dark:bg-slate-900 rounded-xl text-xs sm:text-sm border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                    <input type="text" id="searchInput" oninput="filterProjects()" placeholder="Projekte durchsuchen..." class="w-full pl-9 pr-4 py-2 bg-white dark:bg-slate-900 rounded-xl text-xs sm:text-sm border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-400">
                 </div>
                 <div class="flex flex-wrap items-center gap-1.5 w-full sm:w-auto justify-start sm:justify-end" id="tagFilters">
-                    <button onclick="setFilter('all', this)" class="tag-btn active-tag px-3 py-1.5 rounded-xl text-xs font-mono font-bold bg-amber-400 text-slate-900 transition-all">All</button>
+                    <button onclick="setFilter('all', this)" class="tag-btn active-tag px-3 py-1.5 rounded-xl text-xs font-mono font-bold bg-amber-400 text-slate-900 transition-all">Alle</button>
                 </div>
             </div>
         </section>
@@ -137,15 +126,15 @@
         <section class="space-y-6">
             <div class="flex items-center justify-between border-b-2 border-slate-200 dark:border-slate-700 pb-2">
                 <h2 class="text-xl font-bold font-mono text-slate-900 dark:text-white flex items-center gap-2">
-                    <i class="fa-solid fa-folder-open text-amber-500"></i> Project Documentation
+                    <i class="fa-solid fa-folder-open text-amber-500"></i> Projektdokumentation
                 </h2>
-                <span class="text-xs font-mono text-slate-500 dark:text-slate-400" id="projectCount">Scanning...</span>
+                <span class="text-xs font-mono text-slate-500 dark:text-slate-400" id="projectCount">Scanne Ordner...</span>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="projectsGrid">
                 <div class="col-span-full text-center py-12 font-mono text-slate-500 animate-pulse">
                     <i class="fa-solid fa-radar text-3xl mb-3 text-amber-500 block"></i>
-                    Scanning repository folders...
+                    Durchsuche Repository-Unterordner...
                 </div>
             </div>
         </section>
@@ -154,19 +143,19 @@
 
     <!-- CHAPTER VIEWER MODAL OVERLAY -->
     <div id="chapterModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-6">
-        <div class="bg-white dark:bg-slate-800 w-full max-w-4xl h-[90vh] rounded-3xl border-4 border-amber-400 dark:border-amber-500 shadow-2xl flex flex-col overflow-hidden relative animate-in fade-in zoom-in-95 duration-200">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-4xl h-[90vh] rounded-3xl border-4 border-amber-400 dark:border-amber-500 shadow-2xl flex flex-col overflow-hidden relative">
             <!-- Modal Header -->
             <div class="flex items-center justify-between px-6 py-4 bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
                 <div class="flex items-center gap-2 font-mono text-xs text-amber-600 dark:text-amber-400 truncate">
-                    <i class="fa-regular fa-file-lines"></i> <span id="modalFileLabel" class="truncate">Chapter</span>
+                    <i class="fa-regular fa-file-code"></i> <span id="modalFileLabel" class="truncate">Kapitel</span>
                 </div>
-                <button onclick="closeChapterModal()" class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 hover:bg-red-500 hover:text-white flex items-center justify-center text-slate-700 dark:text-slate-300 transition-colors" title="Close">
+                <button onclick="closeChapterModal()" class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 hover:bg-red-500 hover:text-white flex items-center justify-center text-slate-700 dark:text-slate-300 transition-colors" title="Schließen">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
-            <!-- Modal Body / Rendered Markdown Content -->
-            <div id="modalChapterContent" class="p-6 sm:p-10 overflow-y-auto flex-1 prose dark:prose-invert max-w-none text-slate-800 dark:text-slate-100 font-sans leading-relaxed">
-                <!-- Content gets loaded here -->
+            <!-- Modal Body (Lädt HTML direkt rein) -->
+            <div id="modalChapterContent" class="p-6 sm:p-10 overflow-y-auto flex-1 text-slate-800 dark:text-slate-100 font-sans leading-relaxed">
+                <!-- Inhalt wird dynamisch geladen -->
             </div>
         </div>
     </div>
@@ -187,16 +176,13 @@
             }
         });
 
-        // Auto-Detect GitHub Owner and Repository from URL
-        let owner = 'quirinschmid';
+        // GitHub Owner & Repo Erkennung
+        let owner = 'solderlogs';
         let repo = 'SolderLog';
-
         const pathSegments = window.location.pathname.split('/').filter(Boolean);
         if (window.location.hostname.includes('github.io')) {
             owner = window.location.hostname.split('.')[0];
-            if (pathSegments.length > 0) {
-                repo = pathSegments[0];
-            }
+            if (pathSegments.length > 0) repo = pathSegments[0];
         }
 
         let loadedProjectsData = [];
@@ -206,22 +192,20 @@
             const grid = document.getElementById('projectsGrid');
             grid.innerHTML = `<div class="col-span-full text-center py-12 font-mono text-slate-500 animate-pulse">
                 <i class="fa-solid fa-radar text-3xl mb-3 text-amber-500 block"></i>
-                Scanning subfolders in repository...
+                Scanne Unterordner...
             </div>`;
 
             try {
                 const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents`);
-                if (!res.ok) throw new Error('GitHub API error or private repository.');
+                if (!res.ok) throw new Error('GitHub API Fehler.');
                 const items = await res.json();
 
                 const ignoredDirs = ['.github', '.git', 'images', 'assets', 'css', 'js'];
                 const subdirs = items.filter(item => item.type === 'dir' && !ignoredDirs.includes(item.name.toLowerCase()));
 
                 if (subdirs.length === 0) {
-                    grid.innerHTML = `<div class="col-span-full text-center py-10 font-mono text-slate-500">
-                        No project folders found yet. Create a folder in your repository to get started!
-                    </div>`;
-                    document.getElementById('projectCount').innerText = '0 projects listed';
+                    grid.innerHTML = `<div class="col-span-full text-center py-10 font-mono text-slate-500">Keine Projekt-Ordner gefunden.</div>`;
+                    document.getElementById('projectCount').innerText = '0 Projekte';
                     return;
                 }
 
@@ -235,9 +219,9 @@
 
                         let projectMeta = {
                             title: formatTitle(dir.name),
-                            description: `Build logs and documentation for ${formatTitle(dir.name)}.`,
-                            status: 'In Progress',
-                            tags: ['electronics'],
+                            description: `Dokumentation für ${formatTitle(dir.name)}.`,
+                            status: 'In Arbeit',
+                            tags: ['elektronik'],
                             thumbnail: '',
                             chapters: []
                         };
@@ -256,11 +240,12 @@
                             });
                         }
 
-                        const mdFiles = dirFiles.filter(f => f.name.toLowerCase().endsWith('.md') && f.name.toLowerCase() !== 'readme.md');
+                        // Suche nach ALLEN .html Dateien als Kapitel (außer index.html)
+                        const htmlFiles = dirFiles.filter(f => f.name.toLowerCase().endsWith('.html') && f.name.toLowerCase() !== 'index.html');
                         
                         if (!projectMeta.chapters || projectMeta.chapters.length === 0) {
-                            projectMeta.chapters = mdFiles.map(f => ({
-                                title: formatTitle(f.name.replace(/\.md$/i, '')),
+                            projectMeta.chapters = htmlFiles.map(f => ({
+                                title: formatTitle(f.name.replace(/\.html$/i, '')),
                                 file: `${dir.name}/${f.name}`
                             }));
                         } else {
@@ -281,7 +266,7 @@
 
                         loadedProjectsData.push({ name: dir.name, ...projectMeta });
                     } catch (e) {
-                        console.error('Error parsing folder:', dir.name, e);
+                        console.error('Fehler beim Ordner:', dir.name, e);
                     }
                 }
 
@@ -289,22 +274,15 @@
                 renderProjects(loadedProjectsData);
             } catch (err) {
                 console.error(err);
-                grid.innerHTML = `<div class="col-span-full text-center py-10 font-mono text-red-500">
-                    <i class="fa-solid fa-triangle-exclamation text-xl mb-2 block"></i>
-                    Could not fetch repository folders automatically.<br><span class="text-xs text-slate-400">Make sure your GitHub repository is public.</span>
-                </div>`;
+                grid.innerHTML = `<div class="col-span-full text-center py-10 font-mono text-red-500">Ordner konnten nicht geladen werden.</div>`;
             }
         }
 
         function updateDynamicTags(tagMap) {
             const container = document.getElementById('tagFilters');
-            const topTags = Object.keys(tagMap)
-                .sort((a, b) => tagMap[b] - tagMap[a])
-                .slice(0, 5);
+            const topTags = Object.keys(tagMap).sort((a, b) => tagMap[b] - tagMap[a]).slice(0, 5);
 
-            container.innerHTML = `
-                <button onclick="setFilter('all', this)" class="tag-btn active-tag px-3 py-1.5 rounded-xl text-xs font-mono font-bold bg-amber-400 text-slate-900 transition-all">All</button>
-            `;
+            container.innerHTML = `<button onclick="setFilter('all', this)" class="tag-btn active-tag px-3 py-1.5 rounded-xl text-xs font-mono font-bold bg-amber-400 text-slate-900 transition-all">Alle</button>`;
 
             topTags.forEach(tag => {
                 const btn = document.createElement('button');
@@ -316,10 +294,7 @@
         }
 
         function formatTitle(str) {
-            return str
-                .replace(/[-_]/g, ' ')
-                .replace(/^\d+[\s-_]*/, '')
-                .replace(/\b\w/g, l => l.toUpperCase());
+            return str.replace(/[-_]/g, ' ').replace(/^\d+[\s-_]*/, '').replace(/\b\w/g, l => l.toUpperCase());
         }
 
         function renderProjects(projects) {
@@ -328,25 +303,23 @@
             grid.innerHTML = '';
 
             if (projects.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-10 font-mono text-slate-500">No projects found.</div>`;
-                countEl.innerText = '0 projects listed';
+                grid.innerHTML = `<div class="col-span-full text-center py-10 font-mono text-slate-500">Keine Projekte gefunden.</div>`;
+                countEl.innerText = '0 Projekte';
                 return;
             }
 
-            countEl.innerText = `${projects.length} ${projects.length === 1 ? 'project' : 'projects'} listed`;
+            countEl.innerText = `${projects.length} ${projects.length === 1 ? 'Projekt' : 'Projekte'}`;
 
             projects.forEach(p => {
                 const tagListStr = (p.tags || []).map(t => t.toLowerCase()).join(' ');
-                
-                // Chapter links now trigger openChapter(file) instead of standard href navigation
                 const chaptersHtml = (p.chapters || []).map(ch => `
                     <li>
                         <button onclick="openChapter('${ch.file}')" class="w-full text-left flex items-center justify-between p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-amber-400 text-slate-700 dark:text-slate-200 hover:text-amber-600 transition-all group">
-                            <span class="truncate"><i class="fa-regular fa-file-lines mr-2 text-slate-400 group-hover:text-amber-500"></i>${ch.title}</span>
+                            <span class="truncate"><i class="fa-solid fa-file-code mr-2 text-slate-400 group-hover:text-amber-500"></i>${ch.title}</span>
                             <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover:opacity-100 transition-opacity"></i>
                         </button>
                     </li>
-                `).join('') || '<li class="text-xs text-slate-400 font-mono">No markdown chapters found yet.</li>';
+                `).join('') || '<li class="text-xs text-slate-400 font-mono">Keine HTML-Kapitel gefunden.</li>';
 
                 const card = document.createElement('article');
                 card.className = 'project-card bg-white dark:bg-slate-800 rounded-2xl border-2 border-slate-900/10 dark:border-slate-700 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between';
@@ -359,7 +332,7 @@
                             <img src="${p.thumbnail}" alt="${p.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                             <div class="absolute top-3 right-3 bg-amber-500 text-slate-900 font-mono text-[11px] font-bold px-2.5 py-1 rounded-full shadow-md flex items-center gap-1.5">
                                 <span class="w-2 h-2 rounded-full bg-slate-900 animate-pulse"></span>
-                                ${p.status || 'Active'}
+                                ${p.status || 'Aktiv'}
                             </div>
                             <div class="absolute bottom-3 left-3 flex gap-1.5 flex-wrap">
                                 ${(p.tags || []).map(t => `<span class="bg-slate-900/80 text-amber-400 backdrop-blur-sm text-[10px] font-mono px-2 py-0.5 rounded-md">#${t}</span>`).join('')}
@@ -372,7 +345,7 @@
                             </div>
                             <div class="bg-amber-50/60 dark:bg-slate-900/60 p-3.5 rounded-xl border border-amber-200/60 dark:border-slate-700/60 space-y-2">
                                 <span class="text-[11px] font-mono font-bold text-amber-800 dark:text-amber-400 uppercase tracking-wider block">
-                                    <i class="fa-solid fa-list-ol mr-1"></i> Chapters (${p.chapters.length}):
+                                    <i class="fa-solid fa-list-ol mr-1"></i> Kapitel (${p.chapters.length}):
                                 </span>
                                 <ul class="space-y-1.5 text-xs font-mono max-h-40 overflow-y-auto">
                                     ${chaptersHtml}
@@ -382,14 +355,13 @@
                     </div>
                     <div class="px-5 py-3 bg-slate-50 dark:bg-slate-900/40 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between text-[11px] font-mono text-slate-500">
                         <span><i class="fa-solid fa-folder mr-1"></i> /${p.name}</span>
-                        <span>${p.chapters.length} chapters</span>
+                        <span>${p.chapters.length} Kapitel</span>
                     </div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        // Modal Viewer Functions
         async function openChapter(filePath) {
             const modal = document.getElementById('chapterModal');
             const contentEl = document.getElementById('modalChapterContent');
@@ -402,9 +374,8 @@
             try {
                 const res = await fetch(filePath);
                 if (!res.ok) throw new Error('Datei nicht gefunden.');
-                const markdownText = await res.text();
-                // Parse markdown into HTML using marked.js
-                contentEl.innerHTML = marked.parse(markdownText);
+                const htmlText = await res.text();
+                contentEl.innerHTML = htmlText;
             } catch (err) {
                 contentEl.innerHTML = `<div class="text-center py-20 font-mono text-red-500"><i class="fa-solid fa-triangle-exclamation text-2xl mb-2 block"></i>Kapitel konnte nicht geladen werden (${filePath}).</div>`;
             }
@@ -414,10 +385,7 @@
             document.getElementById('chapterModal').classList.add('hidden');
         }
 
-        // Close modal on Escape key
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') closeChapterModal();
-        });
+        window.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeChapterModal(); });
 
         function setFilter(tag, btnElement) {
             activeTag = tag;
@@ -450,7 +418,7 @@
                     card.classList.add('hidden');
                 }
             });
-            document.getElementById('projectCount').innerText = `${visibleCount} ${visibleCount === 1 ? 'project' : 'projects'} listed`;
+            document.getElementById('projectCount').innerText = `${visibleCount} ${visibleCount === 1 ? 'Projekt' : 'Projekte'}`;
         }
 
         window.addEventListener('DOMContentLoaded', loadProjectsFromGitHub);
