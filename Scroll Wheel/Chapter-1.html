@@ -1,107 +1,214 @@
+```html
+<!-- MathJax configuration -->
+<script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+    };
+</script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
 <article class="space-y-6 max-w-none">
+
     <!-- Hauptüberschrift des Kapitels -->
     <div class="border-b pb-4 dark:border-slate-700">
-        <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white">Chapter 1: Capacitance?</h2>
-        <p class="text-sm text-slate-500 dark:text-slate-400 font-mono mt-1">How does it work, how can my ESP32 measure it?</p>
+        <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white">
+            Chapter 1: Capacitance?
+        </h2>
+        <p class="text-sm text-slate-500 dark:text-slate-400 font-mono mt-1">
+            How does it work, and how can my ESP32 measure it?
+        </p>
     </div>
 
     <!-- Unterüberschrift / Sektion -->
     <section class="space-y-3">
-        <h3 class="text-lg font-bold text-amber-600 dark:text-amber-400 font-mono">1.1 How it started</h3>
+        <h3 class="text-lg font-bold text-amber-600 dark:text-amber-400 font-mono">
+            1.1 How It Started
+        </h3>
+
         <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-            A while ago, I came across a break outboard featuring a capacitive scroll wheel, similar to the one from <a href="https://pcbgadgets.com/index.php?route=product/product&limit=15&product_id=54">PCB Gadgets</a>.
-            After a little investigation, I found several different variations of this design. Some had funky, squiggly lines between capacitive pads. This made sense to me, since they could potetially improve finger detection, 
-            when the finger rested between two pads. 
-            Since this idea had stayed with me for quite a while, I spontaneously decided this weekend that I want to try it myself. So I looked for parts lying around in my tinkering box that might be suitable for my quest.
-            In this treasure trove I found a Seeed Xiao ESP32-S3, some solid-core wire, orange LEDs, resistors, and some copper tape. This was good enough for a start. 
+            A while ago, I came across a breakout board featuring a capacitive
+            scroll wheel, similar to the one from
+            <a href="https://pcbgadgets.com/index.php?route=product/product&limit=15&product_id=54"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="underline text-amber-600 dark:text-amber-400">
+                PCB Gadgets
+            </a>.
+
+            After a little investigation, I found several different variations
+            of this design. Some had funky, squiggly lines between capacitive
+            pads. This made sense to me, since they could potentially improve
+            finger detection when the finger rested between two pads.
+
+            Since this idea had stayed with me for quite a while, I
+            spontaneously decided this weekend that I wanted to try it myself.
+            So I looked for parts lying around in my tinkering box that might
+            be suitable for my quest.
+
+            In this treasure trove, I found a Seeed XIAO ESP32-S3, some
+            solid-core wire, orange LEDs, resistors, and some copper tape.
+            This was good enough for a start.
         </p>
     </section>
 
-    <!-- Unterüberschrift / Sektion mit Bild -->
+    <!-- Unterüberschrift / Sektion mit Formeln und Bild -->
     <section class="space-y-3">
-        <h3 class="text-lg font-bold text-amber-600 dark:text-amber-400 font-mono">1.2 Capacity and Formulas</h3>
-        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-            Before I started tinkering, I wanted to understand how capacitive sensing can detect when a sensor is touched. 
-            In a nutshell, a finger influences the electric field around a sensor. When a finger iapproaches a sensor, it changes the effective capacitance of the sensor. This change can be measured. 
-            The relationship between, voltage, and capacitance is described by</p>
+        <h3 class="text-lg font-bold text-amber-600 dark:text-amber-400 font-mono">
+            1.2 Capacitance and Formulas
+        </h3>
 
-        <div class="my-4 p-4 bg-slate-100 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-center font-mono text-sm text-amber-500">
+        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+            Before I started tinkering, I wanted to understand how capacitive
+            sensing can detect when a sensor is touched.
+
+            In a nutshell, a finger influences the electric field around a
+            sensor. When a finger approaches a sensor, it changes the effective
+            capacitance of the sensor. This change can be measured.
+
+            The relationship between current, voltage, and capacitance is
+            described by:
+        </p>
+
+        <!-- Equation 1 -->
+        <div class="my-4 p-4 bg-slate-100 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-center font-mono text-sm text-amber-500 overflow-x-auto">
             $$I(t) = C \frac{dV(t)}{dt}$$
         </div>
-            
-<p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed"> for a constant capacitance, this can be rearranged to </p>
 
-         <div class="my-4 p-4 bg-slate-100 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-center font-mono text-sm text-amber-500">
+        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+            For a constant capacitance, this can be rearranged to:
+        </p>
+
+        <!-- Equation 2 -->
+        <div class="my-4 p-4 bg-slate-100 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-center font-mono text-sm text-amber-500 overflow-x-auto">
             $$C = \frac{I(t)}{\frac{dV(t)}{dt}}$$
         </div>
-            
-<p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed"> This allows us to derive capacitance from the instantaneous current I(t) divided by the rate of change of voltage dV(t)/dt across the capacitor or sensor.
-            However, since I am using an ESP32-S3, I can can take advantage of its <a href="https://docs.espressif.com/projects/esp-idf/en/v5.5/esp32s3/api-reference/peripherals/cap_touch_sens.html">
-                integrated capacitive touch hardware</a>.
-            <a href = "https://wiki.seeedstudio.com/xiao_esp32s3_pin_multiplexing/"> Pins D0 to D5 and D8 to D12 </a>         
-            can be used for touch sensing. 
-            To understand what the ESP does, the formula above needs to be rearranged again:</p>
 
-                 <div class="my-4 p-4 bg-slate-100 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-center font-mono text-sm text-amber-500">
+        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+            This allows us to derive capacitance from the instantaneous
+            current \(I(t)\) divided by the rate of change of voltage
+            \(\frac{dV(t)}{dt}\) across the capacitor or sensor.
+
+            However, since I am using an ESP32-S3, I can take advantage of its
+            <a href="https://docs.espressif.com/projects/esp-idf/en/v5.5/esp32s3/api-reference/peripherals/esp_touch_sensor.html"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="underline text-amber-600 dark:text-amber-400">
+                integrated capacitive touch hardware
+            </a>.
+
+            <a href="https://wiki.seeedstudio.com/xiao_esp32s3_pin_multiplexing/"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="underline text-amber-600 dark:text-amber-400">
+                Pins D0 to D5 and D8 to D12
+            </a>
+            can be used for touch sensing.
+
+            To understand what the ESP does, the formula above needs to be
+            rearranged again:
+        </p>
+
+        <!-- Equation 3 -->
+        <div class="my-4 p-4 bg-slate-100 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-center font-mono text-sm text-amber-500 overflow-x-auto">
             $$\frac{dV(t)}{dt} = \frac{I(t)}{C}$$
         </div>
 
-        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed"> nder the assumtion of constant current I and capacitance C over the measured interval, the voltage change can be expressed as follows: </p>
+        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+            Under the assumption of constant current \(I\) and capacitance
+            \(C\) over the measured interval, the voltage change can be
+            expressed as follows:
+        </p>
 
-                         <div class="my-4 p-4 bg-slate-100 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-center font-mono text-sm text-amber-500">
+        <!-- Equation 4 -->
+        <div class="my-4 p-4 bg-slate-100 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-center font-mono text-sm text-amber-500 overflow-x-auto">
             $$\Delta V = \frac{I}{C} \Delta t$$
         </div>
-            
 
-            <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">Rearranging this for time gives:</p>
+        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+            Rearranging this for time gives:
+        </p>
 
-          <div class="my-4 p-4 bg-slate-100 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-center font-mono text-sm text-amber-500">
+        <!-- Equation 5 -->
+        <div class="my-4 p-4 bg-slate-100 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-center font-mono text-sm text-amber-500 overflow-x-auto">
             $$\Delta t = \frac{C \Delta V}{I}$$
         </div>
-            
-       
 
         <!-- Bild mit Unterschrift -->
         <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
-            <!-- Ersetze 'bild1.jpg' mit dem Dateinamen deines Bildes im selben Ordner -->
-            <img src="scroll-wheel/bild1.jpg" alt="Steckbrett Aufbau" class="w-full h-auto rounded-xl shadow-sm object-cover max-h-96">
+            <img
+                src="scroll-wheel/bild1.jpg"
+                alt="Breadboard circuit setup"
+                class="w-full h-auto rounded-xl shadow-sm object-cover max-h-96"
+                loading="lazy"
+            >
+
             <figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
-                📸 Abbildung 1: Erster Aufbau der Schaltung auf dem Test-Steckbrett.
+                📸 Figure 1: The initial circuit setup on the test breadboard.
             </figcaption>
         </figure>
     </section>
 
     <!-- Unterüberschrift / Sektion mit Video -->
     <section class="space-y-3">
-        <h3 class="text-lg font-bold text-amber-600 dark:text-amber-400 font-mono">1.3 Conclusion</h3>
-        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-            So under the assumtion of a constant currant, I, and a fixed voltage, delta_V, a smaller capacitance charges faster than a larger one.
+        <h3 class="text-lg font-bold text-amber-600 dark:text-amber-400 font-mono">
+            1.3 Conclusion
+        </h3>
 
-            1. When we connect a piece of copper tape to a touch enabled GPIO pin, such as. D0 on the Xiao ESP32-S3, the electrode forms a electrical capacitive system with its surroundings. 
-            2. The touch sensing hardare of the ESP repeatedly charges and discharges this capacitor. 
-            3. When a finger approaches the copper tape, it changes the effective capacitance. This leads to a change in length of the charge and discharge cycle. 
-            4. The touch hardware measures the time needed for a fixed number of charge-discharge cycles and returns this time as raw data. By monitoring changes in this value, it is possible to detect, when a finger approaches or touches the sonsor.
+        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+            So, under the assumption of a constant current \(I\) and a fixed
+            voltage change \(\Delta V\), a smaller capacitance charges faster
+            than a larger one.
         </p>
 
-        <!-- Video mit Unterschrift (lokales Video oder YouTube) -->
+        <ol class="list-decimal list-inside space-y-2 text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+            <li>
+                When we connect a piece of copper tape to a touch-enabled GPIO
+                pin, such as D0 on the XIAO ESP32-S3, the electrode forms an
+                electrical capacitive system with its surroundings.
+            </li>
+
+            <li>
+                The touch sensing hardware of the ESP repeatedly charges and
+                discharges this capacitor.
+            </li>
+
+            <li>
+                When a finger approaches the copper tape, it changes the
+                effective capacitance. This leads to a change in the length
+                of the charge and discharge cycle.
+            </li>
+
+            <li>
+                The touch hardware measures the time needed for a fixed
+                number of charge-discharge cycles and returns this time as
+                raw data. By monitoring changes in this value, it is possible
+                to detect when a finger approaches or touches the sensor.
+            </li>
+        </ol>
+
+        <!-- Video mit Unterschrift -->
         <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
             <div class="aspect-video w-full rounded-xl overflow-hidden bg-black">
-                <!-- Variante A: Lokales Video aus deinem Ordner -->
-                <video controls class="w-full h-full object-cover">
+                <video
+                    controls
+                    playsinline
+                    preload="metadata"
+                    class="w-full h-full object-cover"
+                >
                     <source src="scroll-wheel/video1.mp4" type="video/mp4">
-                    Dein Browser unterstützt dieses Video-Format nicht.
+                    Your browser does not support this video format.
                 </video>
-                
-                <!-- Variante B (falls YouTube):
-                <iframe class="w-full h-full" src="https://www.youtube-type-embed-link" allowfullscreen></iframe>
-                -->
             </div>
+
             <figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
-                🎥 Video 1: Der erfolgreiche Testlauf der Schaltung.
+                🎥 Video 1: The successful test run of the circuit.
             </figcaption>
         </figure>
     </section>
-</article>
 
-<!-- MathJax Skript für mathematische Formeln (lädt automatisch im Modal) -->
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</article>
+```
