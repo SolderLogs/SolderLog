@@ -6,6 +6,8 @@
     <title>SolderLog | Electronics & Tinkering Projects</title>
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Marked.js for real-time Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -106,7 +108,6 @@
                         Welcome to my blog! Here, I document, step by step, my attempts, short circuits, and successes in soldering, building circuits, and tinkering. No perfection, just the joy of experimenting!
                     </p>
 
-                    <!-- Quick Lab Stats / Tags -->
                     <div class="pt-2 flex flex-wrap justify-center md:justify-start gap-2 text-xs font-mono">
                         <span class="px-2.5 py-1 bg-slate-100 dark:bg-slate-700/70 rounded-lg border border-slate-200 dark:border-slate-600">
                             <i class="fa-solid fa-temperature-arrow-up text-red-500 mr-1"></i> Soldering Iron: Ready
@@ -126,10 +127,8 @@
                     <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
                     <input type="text" id="searchInput" oninput="filterProjects()" placeholder="Search projects or chapters..." class="w-full pl-9 pr-4 py-2 bg-white dark:bg-slate-900 rounded-xl text-xs sm:text-sm border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-400">
                 </div>
-                <!-- Dynamic Tag Filter List -->
                 <div class="flex flex-wrap items-center gap-1.5 w-full sm:w-auto justify-start sm:justify-end" id="tagFilters">
                     <button onclick="setFilter('all', this)" class="tag-btn active-tag px-3 py-1.5 rounded-xl text-xs font-mono font-bold bg-amber-400 text-slate-900 transition-all">All</button>
-                    <!-- Up to 5 dynamic tags will be injected here automatically -->
                 </div>
             </div>
         </section>
@@ -153,6 +152,25 @@
 
     </main>
 
+    <!-- CHAPTER VIEWER MODAL OVERLAY -->
+    <div id="chapterModal" class="fixed inset-0 z-50 bg-slate-900/80 backdrop-blur-sm hidden flex items-center justify-center p-3 sm:p-6">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-4xl h-[90vh] rounded-3xl border-4 border-amber-400 dark:border-amber-500 shadow-2xl flex flex-col overflow-hidden relative animate-in fade-in zoom-in-95 duration-200">
+            <!-- Modal Header -->
+            <div class="flex items-center justify-between px-6 py-4 bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-700">
+                <div class="flex items-center gap-2 font-mono text-xs text-amber-600 dark:text-amber-400 truncate">
+                    <i class="fa-regular fa-file-lines"></i> <span id="modalFileLabel" class="truncate">Chapter</span>
+                </div>
+                <button onclick="closeChapterModal()" class="w-8 h-8 rounded-full bg-slate-200 dark:bg-slate-700 hover:bg-red-500 hover:text-white flex items-center justify-center text-slate-700 dark:text-slate-300 transition-colors" title="Close">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+            <!-- Modal Body / Rendered Markdown Content -->
+            <div id="modalChapterContent" class="p-6 sm:p-10 overflow-y-auto flex-1 prose dark:prose-invert max-w-none text-slate-800 dark:text-slate-100 font-sans leading-relaxed">
+                <!-- Content gets loaded here -->
+            </div>
+        </div>
+    </div>
+
     <script>
         // Theme Toggle
         const themeToggleBtn = document.getElementById('themeToggle');
@@ -170,8 +188,8 @@
         });
 
         // Auto-Detect GitHub Owner and Repository from URL
-        let owner = 'quirinschmid'; // Fallback
-        let repo = 'SolderLog';      // Fallback
+        let owner = 'quirinschmid';
+        let repo = 'SolderLog';
 
         const pathSegments = window.location.pathname.split('/').filter(Boolean);
         if (window.location.hostname.includes('github.io')) {
@@ -224,7 +242,6 @@
                             chapters: []
                         };
 
-                        // Read metadata.json if present
                         const metaFile = dirFiles.find(f => f.name.toLowerCase() === 'metadata.json' || f.name.toLowerCase() === 'project.json');
                         if (metaFile) {
                             const metaRes = await fetch(metaFile.download_url);
@@ -232,7 +249,6 @@
                             projectMeta = { ...projectMeta, ...customMeta };
                         }
 
-                        // Count tag frequencies
                         if (projectMeta.tags && Array.isArray(projectMeta.tags)) {
                             projectMeta.tags.forEach(t => {
                                 const cleanTag = t.toLowerCase().trim();
@@ -240,7 +256,6 @@
                             });
                         }
 
-                        // Auto-find all .md files as chapters
                         const mdFiles = dirFiles.filter(f => f.name.toLowerCase().endsWith('.md') && f.name.toLowerCase() !== 'readme.md');
                         
                         if (!projectMeta.chapters || projectMeta.chapters.length === 0) {
@@ -255,7 +270,6 @@
                             }));
                         }
 
-                        // Thumbnail detection
                         if (!projectMeta.thumbnail) {
                             const imgFile = dirFiles.find(f => /\.(png|jpg|jpeg|gif|webp)$/i.test(f.name));
                             if (imgFile) {
@@ -282,11 +296,8 @@
             }
         }
 
-        // Dynamically build top 5 tags in the filter bar
         function updateDynamicTags(tagMap) {
             const container = document.getElementById('tagFilters');
-            
-            // Extract top 5 tags sorted by usage
             const topTags = Object.keys(tagMap)
                 .sort((a, b) => tagMap[b] - tagMap[a])
                 .slice(0, 5);
@@ -326,12 +337,14 @@
 
             projects.forEach(p => {
                 const tagListStr = (p.tags || []).map(t => t.toLowerCase()).join(' ');
+                
+                // Chapter links now trigger openChapter(file) instead of standard href navigation
                 const chaptersHtml = (p.chapters || []).map(ch => `
                     <li>
-                        <a href="${ch.file}" class="flex items-center justify-between p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-amber-400 text-slate-700 dark:text-slate-200 hover:text-amber-600 transition-all group">
+                        <button onclick="openChapter('${ch.file}')" class="w-full text-left flex items-center justify-between p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-amber-400 text-slate-700 dark:text-slate-200 hover:text-amber-600 transition-all group">
                             <span class="truncate"><i class="fa-regular fa-file-lines mr-2 text-slate-400 group-hover:text-amber-500"></i>${ch.title}</span>
                             <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover:opacity-100 transition-opacity"></i>
-                        </a>
+                        </button>
                     </li>
                 `).join('') || '<li class="text-xs text-slate-400 font-mono">No markdown chapters found yet.</li>';
 
@@ -375,6 +388,36 @@
                 grid.appendChild(card);
             });
         }
+
+        // Modal Viewer Functions
+        async function openChapter(filePath) {
+            const modal = document.getElementById('chapterModal');
+            const contentEl = document.getElementById('modalChapterContent');
+            const labelEl = document.getElementById('modalFileLabel');
+
+            modal.classList.remove('hidden');
+            labelEl.innerText = filePath;
+            contentEl.innerHTML = `<div class="text-center py-20 font-mono text-slate-500 animate-pulse"><i class="fa-solid fa-spinner fa-spin text-2xl mb-2 text-amber-500 block"></i>Lade Kapitel...</div>`;
+
+            try {
+                const res = await fetch(filePath);
+                if (!res.ok) throw new Error('Datei nicht gefunden.');
+                const markdownText = await res.text();
+                // Parse markdown into HTML using marked.js
+                contentEl.innerHTML = marked.parse(markdownText);
+            } catch (err) {
+                contentEl.innerHTML = `<div class="text-center py-20 font-mono text-red-500"><i class="fa-solid fa-triangle-exclamation text-2xl mb-2 block"></i>Kapitel konnte nicht geladen werden (${filePath}).</div>`;
+            }
+        }
+
+        function closeChapterModal() {
+            document.getElementById('chapterModal').classList.add('hidden');
+        }
+
+        // Close modal on Escape key
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeChapterModal();
+        });
 
         function setFilter(tag, btnElement) {
             activeTag = tag;
