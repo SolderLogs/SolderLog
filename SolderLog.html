@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MakerLab & SparkLogs | My Tinkering Projects</title>
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            400: '#facc15',
+                            500: '#eab308',
+                            600: '#ca8a04',
+                        },
+                        neon: {
+                            pink: '#ff007f',
+                            cyan: '#00f0ff',
+                            green: '#39ff14',
+                            amber: '#ffb700'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Courier Prime', 'Monaco', 'Consolas', 'monospace']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom Styles -->
+    <style>
+        .bg-grid-pattern {
+            background-size: 30px 30px;
+            background-image: 
+                linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+        }
+        .dark .bg-grid-pattern {
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+        }
+        
+        /* LED Status Glows */
+        .led-glow-green {
+            box-shadow: 0 0 8px #39ff14, inset 0 0 4px #39ff14;
+        }
+        .led-glow-amber {
+            box-shadow: 0 0 8px #ffb700, inset 0 0 4px #ffb700;
+        }
+        .led-glow-pink {
+            box-shadow: 0 0 8px #ff007f, inset 0 0 4px #ff007f;
+        }
+
+        /* Fun Wobble Animation */
+        @keyframes subtle-float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-5px) rotate(1deg); }
+        }
+        .animate-float {
+            animation: subtle-float 4s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-amber-50/50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen font-sans transition-colors duration-300 bg-grid-pattern relative">
+
+    <header class="sticky top-0 z-40 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b-4 border-amber-300 dark:border-amber-500/30 px-4 py-3 transition-colors">
+        <div class="max-w-6xl mx-auto flex items-center justify-between">
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-amber-400 dark:bg-amber-500 flex items-center justify-center text-slate-900 shadow-md group-hover:rotate-12 transition-transform">
+                    <i class="fa-solid fa-bolt text-xl"></i>
+                </div>
+                <div>
+                    <span class="font-mono font-bold text-lg tracking-wider text-slate-900 dark:text-amber-400 block leading-none">SolderLog</span>
+                    <span class="text-xs text-slate-500 dark:text-slate-400 font-mono">⚡ Electronics & Tinkering</span>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-3">
+                <!-- Add Project Generator Modal Button -->
+                <button onclick="openGeneratorModal()" class="px-3 py-2 bg-amber-400 hover:bg-amber-500 text-slate-900 font-bold rounded-xl text-xs sm:text-sm shadow-md hover:shadow-lg transition-all flex items-center gap-2 border-2 border-slate-900/10">
+                    <i class="fa-solid fa-plus-circle"></i>
+                    <span class="hidden sm:inline">New Chapter / Project</span>
+                </button>
+
+                <!-- Dark Mode Toggle Button -->
+                <button id="themeToggle" class="w-10 h-10 rounded-xl bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-amber-400 flex items-center justify-center hover:scale-105 transition-all border border-slate-300 dark:border-slate-700" title="Switch color scheme">
+                    <i class="fa-solid fa-moon dark:hidden"></i>
+                    <i class="fa-solid fa-sun hidden dark:block"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 space-y-10">
+
+        <!-- Intro / Bio Card -->
+        <section class="bg-white dark:bg-slate-800/90 rounded-3xl p-6 sm:p-8 shadow-xl border-4 border-slate-900/10 dark:border-slate-700/50 relative overflow-hidden backdrop-blur-sm">
+            <div class="absolute -right-10 -bottom-10 opacity-10 text-slate-900 dark:text-white pointer-events-none">
+                <i class="fa-solid fa-microchip text-9xl"></i>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center gap-6 md:gap-8 relative z-10">
+                <!-- Avatar / Circuit Board Badge -->
+                <div class="relative group animate-float">
+                    <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-2xl bg-amber-100 dark:bg-slate-700 border-4 border-amber-400 dark:border-amber-500 p-2 shadow-inner flex items-center justify-center overflow-hidden">
+                        <img src="https://placehold.co/300x300/eab308/ffffff?text=⚡+Maker" alt="Maker Avatar" class="w-full h-full object-cover rounded-xl shadow-sm" onerror="this.onerror=null; this.src='https://placehold.co/300x300/eab308/ffffff?text=Maker';">
+                    </div>
+                    <!-- LED indicator tag -->
+                    <div class="absolute -top-2 -right-2 bg-emerald-500 text-white text-[10px] font-mono px-2 py-0.5 rounded-full border-2 border-white dark:border-slate-800 flex items-center gap-1.5 shadow-md">
+                        <span class="w-2 h-2 rounded-full bg-emerald-300 animate-pulse"></span>
+                        ONLINE
+                    </div>
+                </div>
+
+                <!-- Intro Text -->
+                <div class="flex-1 text-center md:text-left space-y-3">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-100 dark:bg-amber-950/60 text-amber-800 dark:text-amber-300 text-xs font-mono font-bold border border-amber-300 dark:border-amber-700/50">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Beginner Workshop & Notebook
+                    </div>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+                        Learning Electronics & Tinkering 🛠️
+                    </h1>
+                    <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base leading-relaxed max-w-2xl">
+                        Welcome to my blog! Here, I document, step by step, my attempts, short circuits, and successes in soldering, building circuits, and tinkering. No perfection, just the joy of experimenting!
+                    </p>
+
+                    <!-- Quick Lab Stats / Tags -->
+                    <div class="pt-2 flex flex-wrap justify-center md:justify-start gap-2 text-xs font-mono">
+                        <span class="px-2.5 py-1 bg-slate-100 dark:bg-slate-700/70 rounded-lg border border-slate-200 dark:border-slate-600">
+                            <i class="fa-solid fa-temperature-arrow-up text-red-500 mr-1"></i> Soldering Iron: Ready
+                        </span>
+                        <span class="px-2.5 py-1 bg-slate-100 dark:bg-slate-700/70 rounded-lg border border-slate-200 dark:border-slate-600">
+                            <i class="fa-solid fa-triangle-exclamation text-amber-500 mr-1"></i> Spark danger: Low
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="space-y-4">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white/60 dark:bg-slate-800/60 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
+                
+                <!-- Search Input -->
+                <div class="relative w-full sm:w-72">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                    <input type="text" id="searchInput" oninput="filterProjects()" placeholder="Search projects or chapters..." class="w-full pl-9 pr-4 py-2 bg-white dark:bg-slate-900 rounded-xl text-xs sm:text-sm border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                </div>
+
+                <!-- Category Tags -->
+                <div class="flex flex-wrap items-center gap-1.5 w-full sm:w-auto justify-start sm:justify-end" id="tagFilters">
+                    <button onclick="setFilter('all')" class="tag-btn active-tag px-3 py-1.5 rounded-xl text-xs font-mono font-bold bg-amber-400 text-slate-900 transition-all">
+                        All
+                    </button>
+                    <button onclick="setFilter('electronics')" class="tag-btn px-3 py-1.5 rounded-xl text-xs font-mono bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-amber-200 transition-all">
+                        ⚡ Electronics
+                    </button>
+                    <button onclick="setFilter('soldering')" class="tag-btn px-3 py-1.5 rounded-xl text-xs font-mono bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-amber-200 transition-all">
+                        🔥 Soldering
+                    </button>
+                    <button onclick="setFilter('arduino')" class="tag-btn px-3 py-1.5 rounded-xl text-xs font-mono bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-amber-200 transition-all">
+                        🤖 Arduino
+                    </button>
+                    <button onclick="setFilter('esp32')" class="tag-btn px-3 py-1.5 rounded-xl text-xs font-mono bg-slate-200 dark:bg-slate-700 text-slate-700 dark:text-slate-300 hover:bg-amber-200 transition-all">
+                        🤖 ESP32
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <section class="space-y-6">
+            <div class="flex items-center justify-between border-b-2 border-slate-200 dark:border-slate-700 pb-2">
+                <h2 class="text-xl font-bold font-mono text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-folder-open text-amber-500"></i> Project Documentation
+                </h2>
+                <span class="text-xs font-mono text-slate-500 dark:text-slate-400" id="projectCount">1 project listed</span>
+            </div>
+
+            <!-- Grid Container -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="projectsGrid">
+
+                <!-- PROJECT CARD: SCROLL WHEEL -->
+                <article class="project-card bg-white dark:bg-slate-800 rounded-2xl border-2 border-slate-900/10 dark:border-slate-700 shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden flex flex-col justify-between" data-tags="electronics" data-title="scroll wheel">
+                    <div>
+                        <!-- Card Header Banner -->
+                        <div class="relative h-44 bg-slate-100 dark:bg-slate-900 overflow-hidden group">
+                            <img src="https://placehold.co/600x300/38bdf8/ffffff?text=Scroll+Wheel+Project" alt="Scroll Wheel" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.onerror=null; this.src='https://placehold.co/600x300/38bdf8/ffffff?text=Scroll+Wheel';">
+                            <!-- Status Badge -->
+                            <div class="absolute top-3 right-3 bg-amber-500 text-slate-900 font-mono text-[11px] font-bold px-2.5 py-1 rounded-full shadow-md flex items-center gap-1.5 border border-white/20">
+                                <span class="w-2 h-2 rounded-full bg-slate-900 animate-pulse"></span>
+                                In Progress
+                            </div>
+                            <!-- Tags -->
+                            <div class="absolute bottom-3 left-3 flex gap-1.5">
+                                <span class="bg-slate-900/80 text-amber-400 backdrop-blur-sm text-[10px] font-mono px-2 py-0.5 rounded-md">#Electronics</span>
+                            </div>
+                        </div>
+
+                        <!-- Card Body -->
+                        <div class="p-5 space-y-4">
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900 dark:text-white hover:text-amber-500 transition-colors">
+                                    Scroll Wheel
+                                </h3>
+                                <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 mt-1.5 leading-relaxed">
+                                    Building my own scroll wheel from scratch, from the first idea and basic tests to the design and the final wiring.
+                                </p>
+                            </div>
+
+                            <!-- CHAPTERS LIST -->
+                            <div class="bg-amber-50/60 dark:bg-slate-900/60 p-3.5 rounded-xl border border-amber-200/60 dark:border-slate-700/60 space-y-2">
+                                <span class="text-[11px] font-mono font-bold text-amber-800 dark:text-amber-400 uppercase tracking-wider block">
+                                    <i class="fa-solid fa-list-ol mr-1"></i> Documentation Chapters:
+                                </span>
+                                <ul class="space-y-1.5 text-xs font-mono">
+                                    <li>
+                                        <!-- Replace the file names with your real Markdown/HTML file paths -->
+                                        <a href="scroll-wheel-1-how-it-started.md" class="flex items-center justify-between p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-400 text-slate-700 dark:text-slate-200 hover:text-amber-600 transition-all group">
+                                            <span class="truncate"><i class="fa-regular fa-file-lines mr-2 text-slate-400 group-hover:text-amber-500"></i>Chapter 1: How it started</span>
+                                            <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="scroll-wheel-2-basic-tests.md" class="flex items-center justify-between p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-400 text-slate-700 dark:text-slate-200 hover:text-amber-600 transition-all group">
+                                            <span class="truncate"><i class="fa-regular fa-file-lines mr-2 text-slate-400 group-hover:text-amber-500"></i>Chapter 2: Basic tests</span>
+                                            <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="scroll-wheel-3-designing-the-scroll-wheel.md" class="flex items-center justify-between p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-400 text-slate-700 dark:text-slate-200 hover:text-amber-600 transition-all group">
+                                            <span class="truncate"><i class="fa-regular fa-file-lines mr-2 text-slate-400 group-hover:text-amber-500"></i>Chapter 3: Designing the scroll wheel</span>
+                                            <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="scroll-wheel-4-wiring-it-up.md" class="flex items-center justify-between p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-400 text-slate-700 dark:text-slate-200 hover:text-amber-600 transition-all group">
+                                            <span class="truncate"><i class="fa-regular fa-file-lines mr-2 text-slate-400 group-hover:text-amber-500"></i>Chapter 4: Wiring it up</span>
+                                            <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card Footer -->
+                    <div class="px-5 py-3 bg-slate-50 dark:bg-slate-900/40 border-t border-slate-100 dark:border-slate-700/50 flex items-center justify-between text-[11px] font-mono text-slate-500">
+                        <span><i class="fa-regular fa-calendar mr-1"></i> Started: Oct 2026</span>
+                        <span>4 chapters</span>
+                    </div>
+                </article>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Modal Backdrop -->
+    <div id="generatorModal" class="fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-white dark:bg-slate-800 w-full max-w-xl rounded-3xl p-6 sm:p-8 border-4 border-amber-400 dark:border-amber-500 shadow-2xl space-y-5 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b pb-3 dark:border-slate-700">
+                <h3 class="text-lg font-bold font-mono text-slate-900 dark:text-white flex items-center gap-2">
+                    <i class="fa-solid fa-code text-amber-500"></i> Generate Chapter Link Code
+                </h3>
+                <button onclick="closeGeneratorModal()" class="text-slate-400 hover:text-slate-700 dark:hover:text-white">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <p class="text-xs text-slate-600 dark:text-slate-300">
+                Use this helper to quickly create a new chapter for your `index.html`. Copy the code and simply paste it into the relevant list!
+            </p>
+
+            <div class="space-y-3 text-xs font-mono">
+                <div>
+                    <label class="block mb-1 text-slate-700 dark:text-slate-300 font-bold">Chapter title:</label>
+                    <input type="text" id="modalChapterTitle" placeholder="e.g. Chapter 5: Troubleshooting with the multimeter" class="w-full p-2.5 bg-slate-100 dark:bg-slate-900 rounded-xl border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                </div>
+                <div>
+                    <label class="block mb-1 text-slate-700 dark:text-slate-300 font-bold">Markdown file name / path:</label>
+                    <input type="text" id="modalChapterFile" placeholder="e.g. chapter-5-multimeter.md" class="w-full p-2.5 bg-slate-100 dark:bg-slate-900 rounded-xl border border-slate-300 dark:border-slate-700 focus:outline-none focus:ring-2 focus:ring-amber-400">
+                </div>
+            </div>
+
+            <button onclick="generateCode()" class="w-full py-2.5 bg-amber-400 hover:bg-amber-500 font-bold text-slate-900 rounded-xl text-xs font-mono transition-all">
+                Create HTML Code
+            </button>
+
+            <!-- Code Output Box -->
+            <div id="outputArea" class="hidden space-y-2">
+                <label class="block text-xs font-mono font-bold text-slate-700 dark:text-slate-300">Copy this code into your chapter list:</label>
+                <div class="relative">
+                    <textarea id="codeOutput" readonly class="w-full h-24 p-3 bg-slate-900 text-emerald-400 rounded-xl text-[11px] font-mono border border-slate-700 focus:outline-none"></textarea>
+                    <button onclick="copyGeneratedCode()" class="absolute top-2 right-2 px-2.5 py-1 bg-slate-700 hover:bg-slate-600 text-white rounded-lg text-[10px] font-mono transition-all">
+                        <i class="fa-regular fa-copy mr-1"></i> Copy
+                    </button>
+                </div>
+                <div id="copyToast" class="hidden text-center text-xs text-emerald-500 font-mono">Copied to clipboard!</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 1. Theme Toggle Logic
+        const themeToggleBtn = document.getElementById('themeToggle');
+        
+        // Initialize Theme from localStorage or prefers-color-scheme
+        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.theme = 'light';
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.theme = 'dark';
+            }
+        });
+
+        // 2. Tag & Search Filter Logic
+        let activeTag = 'all';
+
+        function setFilter(tag) {
+            activeTag = tag;
+            
+            // Update Active Button Style
+            const buttons = document.querySelectorAll('#tagFilters .tag-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-amber-400', 'text-slate-900', 'font-bold');
+                btn.classList.add('bg-slate-200', 'dark:bg-slate-700', 'text-slate-700', 'dark:text-slate-300');
+            });
+
+            event.currentTarget.classList.remove('bg-slate-200', 'dark:bg-slate-700', 'text-slate-700', 'dark:text-slate-300');
+            event.currentTarget.classList.add('bg-amber-400', 'text-slate-900', 'font-bold');
+
+            filterProjects();
+        }
+
+        function filterProjects() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const cards = document.querySelectorAll('.project-card');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                const tags = card.getAttribute('data-tags') || '';
+                const title = card.getAttribute('data-title') || '';
+                const cardText = card.innerText.toLowerCase();
+
+                const matchesTag = (activeTag === 'all') || tags.includes(activeTag);
+                const matchesSearch = title.includes(query) || cardText.includes(query);
+
+                if (matchesTag && matchesSearch) {
+                    card.classList.remove('hidden');
+                    visibleCount++;
+                } else {
+                    card.classList.add('hidden');
+                }
+            });
+
+            document.getElementById('projectCount').innerText = `${visibleCount} ${visibleCount === 1 ? 'project' : 'projects'} listed`;
+        }
+
+        // 3. Modal Generator Logic
+        function openGeneratorModal() {
+            document.getElementById('generatorModal').classList.remove('hidden');
+        }
+
+        function closeGeneratorModal() {
+            document.getElementById('generatorModal').classList.add('hidden');
+            document.getElementById('outputArea').classList.add('hidden');
+        }
+
+        function generateCode() {
+            const title = document.getElementById('modalChapterTitle').value.trim() || 'Chapter X: Description';
+            const file = document.getElementById('modalChapterFile').value.trim() || 'chapter-x.md';
+
+            const snippet = `<li>
+    <a href="${file}" class="flex items-center justify-between p-2 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 hover:border-amber-400 dark:hover:border-amber-400 text-slate-700 dark:text-slate-200 hover:text-amber-600 transition-all group">
+        <span class="truncate"><i class="fa-regular fa-file-lines mr-2 text-slate-400 group-hover:text-amber-500"></i>${title}</span>
+        <i class="fa-solid fa-arrow-right text-[10px] opacity-0 group-hover:opacity-100 transition-opacity"></i>
+    </a>
+</li>`;
+
+            document.getElementById('codeOutput').value = snippet;
+            document.getElementById('outputArea').classList.remove('hidden');
+        }
+
+        function copyGeneratedCode() {
+            const copyText = document.getElementById('codeOutput');
+            copyText.select();
+            document.execCommand('copy');
+
+            const toast = document.getElementById('copyToast');
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
