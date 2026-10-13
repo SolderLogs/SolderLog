@@ -1,0 +1,146 @@
+<!-- MathJax configuration -->
+<script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+    };
+</script>
+
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<article class="space-y-6 max-w-none">
+
+    <div class="border-b pb-4 dark:border-slate-700">
+        <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white">
+            Chapter 3: Designing a scroll wheel
+        </h2>
+        <p class="text-sm text-slate-500 dark:text-slate-400 font-mono mt-1">
+            Some quick and dirty CAD modeling
+        </p>
+    </div>
+
+    <section class="space-y-3">
+        <h3 class="text-lg font-bold text-amber-600 dark:text-amber-400 font-mono">
+            1.1 3D-printed circuit boards
+        </h3>
+
+        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+            With this working sensor pad in hand, I wanted to progress my design into a scroll wheel, inspired by the early iPods. Those let you scroll through your music library by moving your finger around a touch sensitive wheel.<br>
+            Since I own a 3D-printer, of course i wanted to use it. After all, if all you have is a 3D-printer, every problem looks like a nail! I was fairly confident this would work because I'd seen makers use 3D-printers to create
+            <a href="https://hackaday.com/2021/12/06/secret-ingredient-for-3d-printed-circuit-traces-electroplating/"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="underline text-amber-600 dark:text-amber-400">
+                home-brewn circuit boards.
+            </a>
+        </p>
+
+    </section>
+
+    <section class="space-y-3">
+        <h3 class="text-lg font-bold text-amber-600 dark:text-amber-400 font-mono">
+            1.2 CAD Design
+        </h3>
+
+        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+            So I opened Fusion 360 and started designing my scroll wheel.<br>
+            The touch wheel has five sensor pads, separated by 1mm wide squiggly line-gaps. I also designed through-holes so I could solder my solid-core wire to the pads on the front and route the wires through to the back. To keep everything tidy, I added channels for the wire aong the back side of the part. <br>
+            Finally, I designed a front cover so the copper sensor pads are not touched directly and are somewhat protected.
+        </p>
+
+        <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
+            <div class="aspect-video w-full rounded-xl overflow-hidden bg-black">
+                <video
+                    controls
+                    playsinline
+                    preload="metadata"
+                    class="w-full h-full object-contain"
+                >
+                    <source src="Unbenanntes Projekt.mp4" type="video/mp4">
+                    Your browser does not support this video format.
+                </video>
+            </div>
+            <figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
+                🎥 Video 1: Video 1: CAD Design
+            </figcaption>
+        </figure>
+
+    </section>
+
+    <section class="space-y-3">
+        <h3 class="text-lg font-bold text-amber-600 dark:text-amber-400 font-mono">
+            1.3 Assembly
+        </h3>
+
+        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+            After 3D-printing both parts, I apllied copper tape to the front. This went very smooth because i could use the edges of my 3D-printed part as a cutting guide for the tape.
+        </p>
+
+        <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
+            <img
+                src="assembly.gif"
+                alt="assembly"
+                class="w-full h-auto rounded-xl shadow-sm object-contain max-h-[500px] mx-auto"
+                loading="lazy"
+            >
+            <figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
+                📸 Figure 1: Figure 1: Apllying the copper tape
+            </figcaption>
+        </figure>
+
+        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+            However, I messed up the through holes a little. To be honest, I had to redesign and print the parts a scond time, because in the first version tolerances were to tight. For the second itearation, I enlarged the throughholes without giving it much thought. This left very little material between the through-holes and the edges of the sensor pads, causing the copper tape to tear in those spots. <br>
+            But since I’m lazy and wanted to see quick results, I carried on anyway, telling myself that I’d fix it in the next iteration (we’ll see if that actually happens ;)). <br>
+            <br>
+            And as you can see in the picture below, it worked!
+        </p>
+
+        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+            But the mistakes didn’t stop there. My string of errors continued with the cover. Because the copper tape had torn, I had to bend the wires a little to get them soldered in place. As a result, they now ended up in slightly different spots than originally planned. Unfortunately, that meant the cutouts in the cover, which I had thoughtfully planned in advance, no longer lined up with my soldering joints.
+        </p>
+
+        <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
+            <img
+                src="bad_fit.png.heic"
+                alt="Bad fit of my scroll wheel cover"
+                class="w-full h-auto rounded-xl shadow-sm object-contain max-h-[500px] mx-auto"
+                loading="lazy"
+            >
+            <figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
+                📸 Figure 2: Figure 3: The fit of my recesses is not optimal
+            </figcaption>
+        </figure>
+
+        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+            Finally, since the tollerances of the channels for my wiring were also off, I had to design a last part: A spacer ring that I glued to the underside of my sensor wheel. This gave me a flat surface that could be taped down to my desk with double-sided tape.
+        </p>
+
+        <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
+            <img
+                src="KlickWheel.png"
+                alt="All CAD parts"
+                class="w-full h-auto rounded-xl shadow-sm object-contain max-h-[500px] mx-auto"
+                loading="lazy"
+            >
+            <figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
+                📸 Figure 3: Figure 4: Overview of all designed parts
+            </figcaption>
+        </figure>
+
+        <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
+            <img
+                src="final_assembly.png.heic"
+                alt="final assembly"
+                class="w-full h-auto rounded-xl shadow-sm object-contain max-h-[500px] mx-auto"
+                loading="lazy"
+            >
+            <figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
+                📸 Figure 4: Figure 5: The final assembly
+            </figcaption>
+        </figure>
+
+    </section>
+
+</article>
