@@ -18,48 +18,126 @@
             Chapter 2: Start the testing
         </h2>
         <p class="text-sm text-slate-500 dark:text-slate-400 font-mono mt-1">
-            How to set up a basic sensor and basic code
+            How to set up a basic touch sensor and code
         </p>
     </div>
 
     <!-- Unterüberschrift / Sektion -->
     <section class="space-y-3">
         <h3 class="text-lg font-bold text-amber-600 dark:text-amber-400 font-mono">
-            1.1 A Simple Copper Plate Sensor
+            1.1 The Simple Copper Plate Sensor
         </h3>
 
         <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
             To get things started, I glued a piece of copper 
             tape to a 3d-printed square and soldered a wire to it. 
-            I then connected the wire to D0 and a LED in series with a resistor to D1. 
+            I then connected the wire to D0 and a LED in series with a resistor to D1. <br>
             Next, I fired up the Arduino IDE to write my first simple test sketch.
             This sketch  reads the touch value reported by the ESP and prints it to the serial monitor.
+			The LED is not yet used in this sketch. 
         </p>
-        <!-- Code-Container -->
-    <div class="relative rounded-2xl overflow-hidden border border-slate-700 shadow-lg my-4">
-        <!-- Kleine Leiste oben im Code-Block (optional mit Dateinamen) -->
-        <div class="bg-slate-900 px-4 py-2 text-xs font-mono text-slate-400 flex items-center justify-between border-b border-slate-800">
-            <span><i class="fa-solid fa-file-code text-amber-400 mr-1.5"></i> sketch.ino</span>
-            <span class="text-[10px] uppercase text-slate-500">C++ / Arduino</span>
-        </div>
-        <!-- Eigentlicher Code-Bereich -->
-        <pre class="p-4 bg-slate-950 text-emerald-400 font-mono text-xs sm:text-sm overflow-x-auto leading-relaxed">
-            <code>
-                const int TOUCH_PIN = D0;
+       
+		<!-- Code-Container -->
+    	<div class="relative rounded-2xl overflow-hidden border border-slate-700 shadow-lg my-4">
+    	    <!-- Kleine Leiste oben im Code-Block (optional mit Dateinamen) -->
+    	    <div class="bg-slate-900 px-4 py-2 text-xs font-mono text-slate-400 flex items-center justify-between border-b border-slate-800">
+        	    <span><i class="fa-solid fa-file-code text-amber-400 mr-1.5"></i>Capacitive Copper Square.ino</span>
+           		<span class="text-[10px] uppercase text-slate-500">C++ / Arduino</span>
+        	</div>
+        	<!-- Eigentlicher Code-Bereich -->
+        	<pre class="p-4 bg-slate-950 text-emerald-400 font-mono text-xs sm:text-sm overflow-x-auto leading-relaxed">
+            	<code>
+                	const int TOUCH_PIN = D0;
 
-                void setup() {
-                  Serial.begin(115200);
-                }
+	                void setup() {
+    	              Serial.begin(115200);
+        	        }
 
-                void loop() {
-                  int touchValue = touchRead(TOUCH_PIN);
-                  Serial.println(touchValue);
-                  delay(50);
-                }
-            </code>
-        </pre>
-    </div>
+            	    void loop() {
+                	  int touchValue = touchRead(TOUCH_PIN);
+                	  Serial.println(touchValue);
+                	  delay(50);
+            	    }
+            	</code>
+        	</pre>
+    	</div>
+
+		<p> As shown in the picture, the touch value was around 85,000 when I touched the sensor and 25,000 when I left it alone. 
+			With these initial measurement, I wanted to use the sensor to controll the LED. Based on my first experiment, 
+			I assuemd that a threshold of 50,000 would work reliably to distinguish between a touch and no touch. </p>
+
+		<figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
+        	<img
+            	src="scroll-wheel/square_values.png"
+            	alt="sensor values"
+            	class="w-full h-auto rounded-xl shadow-sm object-cover max-h-96"
+            	loading="lazy"
+        	>
+
+        	<figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
+            	📸 Figure 1: Read out from the copper square. The values idle around 25,000. When I touch the square values are higher around 85,000.
+        	</figcaption>
+    	</figure>
     </section>
+
+	<section class="space-y-3">
+        <h3 class="text-lg font-bold text-amber-600 dark:text-amber-400 font-mono">
+            1.2 Simple LED Switch
+        </h3>
+		<p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+			Now lets build a switch.
+            This next sketch turns the LED on, as long as the finger touches the coper tape.
+		</p>
+		<!-- Code-Container -->
+    	<div class="relative rounded-2xl overflow-hidden border border-slate-700 shadow-lg my-4">
+    	    <!-- Kleine Leiste oben im Code-Block (optional mit Dateinamen) -->
+    	    <div class="bg-slate-900 px-4 py-2 text-xs font-mono text-slate-400 flex items-center justify-between border-b border-slate-800">
+        	    <span><i class="fa-solid fa-file-code text-amber-400 mr-1.5"></i>Capacitive Copper Square.ino</span>
+           		<span class="text-[10px] uppercase text-slate-500">C++ / Arduino</span>
+        	</div>
+        	<!-- Eigentlicher Code-Bereich -->
+        	<pre class="p-4 bg-slate-950 text-emerald-400 font-mono text-xs sm:text-sm overflow-x-auto leading-relaxed">
+            	<code>
+					const int TOUCH_PIN = D0;
+					const int LED_PIN = D1;
+
+					const int TOUCH_THRESHOLD = 50000;
+
+					void setup() {
+					Serial.begin(115200);
+					pinMode(LED_PIN, OUTPUT);
+					digitalWrite(LED_PIN, LOW);
+					}
+
+					void loop() {
+					int touchValue = touchRead(TOUCH_PIN);
+					Serial.println(touchValue);
+
+					if (touchValue > TOUCH_THRESHOLD) {
+					digitalWrite(LED_PIN, HIGH);
+					} else {
+					digitalWrite(LED_PIN, LOW);
+					}
+					delay(50);
+					}
+				</code>
+        	</pre>
+    	</div>
+		<p> As shown in the picture, this works quite well. Interestingly, the sensor was able to detect my finger 
+			even even when I it was approximateley one millimeter away from the copper tape, without actually touching it. 
+			It also worked when I turned the sensor around and touched the 3D-printed square instead.</p>
+		<figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
+        	<img
+            	src="scroll-wheel/basic_copper_sensor.png"
+            	alt="basic copper sensor"
+            	class="w-full h-auto rounded-xl shadow-sm object-cover max-h-96"
+            	loading="lazy"
+        	>
+
+        	<figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
+            	📸 Figure 1: The sensor switches the LED on, as long as it is touched.
+        	</figcaption>
+    	</figure>
 
 
 
