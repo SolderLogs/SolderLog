@@ -1,0 +1,6 @@
+{
+  "title": "IMU based Space Mouse",
+  "description": "Here, I'm trying to build a Space Mouse based on an IMU",
+  "status": "In Progress",
+  "tags": ["ESP32", "IMU", "Input Device"]
+}
