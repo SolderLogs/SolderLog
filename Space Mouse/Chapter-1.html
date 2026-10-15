@@ -69,7 +69,7 @@ void loop(void) {
   sensors_event_t event;
   accel.getEvent(&amp;event);
 
-  // Werte für X, Y und Z ausgeben
+  // Values for X, Y and Z 
   Serial.print(&quot;Ax: &quot;); Serial.print(event.acceleration.x);
   Serial.print(&quot; | Ay: &quot;); Serial.print(event.acceleration.y);
   Serial.print(&quot; | Az: &quot;); Serial.println(event.acceleration.z);
@@ -104,7 +104,7 @@ void loop(void) {
 #include &lt;Adafruit_Sensor.h&gt;
 #include &lt;Adafruit_LSM303_U.h&gt;
 
-/* Beschleunigungssensor und Magnetometer initialisieren */
+// innitialize accelerometer und Magnetometer
 Adafruit_LSM303_Accel_Unified accel = Adafruit_LSM303_Accel_Unified(30301);
 Adafruit_LSM303_Mag_Unified   mag   = Adafruit_LSM303_Mag_Unified(30302);
 
@@ -126,16 +126,16 @@ void loop(void) {
   sensors_event_t accel_event;
   sensors_event_t mag_event;
   
-  /* Events abrufen */
+  // poll events
   accel.getEvent(&amp;accel_event);
   mag.getEvent(&amp;mag_event);
 
-  /* Beschleunigung (X, Y, Z) ausgeben */
+  // print acceleration
   Serial.print(&quot;Ax: &quot;); Serial.print(accel_event.acceleration.x);
   Serial.print(&quot; | Ay: &quot;); Serial.print(accel_event.acceleration.y);
   Serial.print(&quot; | Az: &quot;); Serial.print(accel_event.acceleration.z);
 
-  /* Magnetometer (X, Y, Z in Mikro-Tesla uT) ausgeben */
+  //print magnetometer
   Serial.print(&quot; || Mx: &quot;); Serial.print(mag_event.magnetic.x);
   Serial.print(&quot; | My: &quot;); Serial.print(mag_event.magnetic.y);
   Serial.print(&quot; | Mz: &quot;); Serial.println(mag_event.magnetic.z);
@@ -174,7 +174,7 @@ void loop(void) {
 #include &lt;Adafruit_LSM303_U.h&gt;
 #include &lt;Adafruit_L3GD20_U.h&gt;
 
-/* Alle drei Sensoren initialisieren */
+// initialize
 Adafruit_LSM303_Accel_Unified accel = Adafruit_LSM303_Accel_Unified(30301);
 Adafruit_LSM303_Mag_Unified   mag   = Adafruit_LSM303_Mag_Unified(30302);
 Adafruit_L3GD20_Unified       gyro  = Adafruit_L3GD20_Unified(20);
@@ -203,22 +203,22 @@ void loop(void) {
   sensors_event_t mag_event;
   sensors_event_t gyro_event;
   
-  /* Events aller Sensoren abrufen */
+  // poll events
   accel.getEvent(&amp;accel_event);
   mag.getEvent(&amp;mag_event);
   gyro.getEvent(&amp;gyro_event);
 
-  /* Beschleunigung (m/s^2) ausgeben */
+  //acceleration
   Serial.print(&quot;Ax: &quot;); Serial.print(accel_event.acceleration.x);
   Serial.print(&quot; | Ay: &quot;); Serial.print(accel_event.acceleration.y);
   Serial.print(&quot; | Az: &quot;); Serial.print(accel_event.acceleration.z);
 
-  /* Magnetometer (uT) ausgeben */
+  /magentometer
   Serial.print(&quot; || Mx: &quot;); Serial.print(mag_event.magnetic.x);
   Serial.print(&quot; | My: &quot;); Serial.print(mag_event.magnetic.y);
   Serial.print(&quot; | Mz: &quot;); Serial.print(mag_event.magnetic.z);
 
-  /* Gyroskop (rad/s) ausgeben */
+  //gyroscope
   Serial.print(&quot; || Gx: &quot;); Serial.print(gyro_event.gyro.x);
   Serial.print(&quot; | Gy: &quot;); Serial.print(gyro_event.gyro.y);
   Serial.print(&quot; | Gz: &quot;); Serial.println(gyro_event.gyro.z);
