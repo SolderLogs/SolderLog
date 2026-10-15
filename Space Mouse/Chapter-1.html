@@ -1,1 +1,298 @@
+<!-- MathJax configuration -->
+<script>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+        }
+    };
+</script>
 
+<script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<article class="space-y-6 max-w-none">
+
+    <div class="border-b pb-4 dark:border-slate-700">
+        <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white">
+            Chater 1: Should be easy
+        </h2>
+        <p class="text-sm text-slate-500 dark:text-slate-400 font-mono mt-1">
+            IMUs and Sensor Fusion
+        </p>
+    </div>
+
+    <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+        I found a <a href="https://learn.adafruit.com/adafruit-9-dof-imu-breakout/introduction"<br>
+           target="_blank"<br>
+           rel="noopener noreferrer"<br>
+           class="underline text-amber-600 dark:text-amber-400"><br>
+            9-DoF inertial measurement unit (IMU)<br>
+        </a> breakout board in my drawer. Originally, I wanted to use it for a univerity project, where the IMU detects gait cycles and an electical muscle stimulation unit stimulates the peroneus muscles at the right time during the cycle to prevent ankle sprains. Because we used another board this one ended up in my drawer. <br>
+        Now lets use it! Should be easy to read out this old IMU sensor and do some sensor fusion, right?
+    </p>
+
+    <section class="space-y-3">
+        <h3 class="text-lg font-bold text-amber-600 dark:text-amber-400 font-mono">
+            1.1 Breadboarding and tests
+        </h3>
+
+        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+            Also the breakout board has lots of pins, we only have to consider four of them, 3.3V, ground, Serial Data Line (SDL) and Serial Clock Line (SCL), to establish a i2c connection and communicate with our sensor. The board has to sensing chips: The LSM303DLHC which features accelerometer and magnetometer and the L3GD20 as a gyroscope. <br>
+            To get both of them working you have to install several libraries: Adafruit Unified Sensor Library, LSM303DLHC Library, L3GD20 Library and Adafruit 9DOF Library. <br>
+            Using those I drew up my first sketch while peeking at adafruits <a href="https://github.com/adafruit/Adafruit_9DOF/tree/master"<br>
+               target="_blank"<br>
+               rel="noopener noreferrer"<br>
+               class="underline text-amber-600 dark:text-amber-400"><br>
+                github repository<br>
+            </a>.
+        </p>
+
+        <div class="my-4 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700">
+            <div class="px-4 py-1.5 text-xs font-mono bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300">IMU_acceleration.ino</div>
+            <pre class="p-4 bg-slate-900 text-slate-100 text-sm leading-relaxed font-mono overflow-x-auto"><code>#include &lt;Wire.h&gt;
+#include &lt;Adafruit_Sensor.h&gt;
+#include &lt;Adafruit_LSM303_U.h&gt;
+
+/* Nur den Beschleunigungssensor initialisieren */
+Adafruit_LSM303_Accel_Unified accel = Adafruit_LSM303_Accel_Unified(30301);
+
+void setup(void) {
+  Serial.begin(115200);
+  
+  if(!accel.begin()) {
+    Serial.println(&quot;Ooops, no LSM303 detected ... Check your wiring!&quot;);
+    while(1);
+  }
+}
+
+void loop(void) {
+  sensors_event_t event;
+  accel.getEvent(&amp;event);
+
+  // Werte für X, Y und Z ausgeben
+  Serial.print(&quot;Ax: &quot;); Serial.print(event.acceleration.x);
+  Serial.print(&quot; | Ay: &quot;); Serial.print(event.acceleration.y);
+  Serial.print(&quot; | Az: &quot;); Serial.println(event.acceleration.z);
+  
+  delay(50);
+}</code></pre>
+        </div>
+
+        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+            Wonderful, it worked, I got my first acceleration data!
+        </p>
+
+        <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
+            <img
+                src="Output_1st_sketch.png"
+                alt="Output 1st sketch"
+                class="w-full h-auto rounded-xl shadow-sm object-contain max-h-[500px] mx-auto"
+                loading="lazy"
+            >
+            <figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
+                📸 Figure 1: My first acceleration data output
+            </figcaption>
+        </figure>
+
+        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+            Because I'am in a flow, lets add magnetometer data from the same chip!
+        </p>
+
+        <div class="my-4 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700">
+            <div class="px-4 py-1.5 text-xs font-mono bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300">acceleration_and_megnetometer.ino</div>
+            <pre class="p-4 bg-slate-900 text-slate-100 text-sm leading-relaxed font-mono overflow-x-auto"><code>#include &lt;Wire.h&gt;
+#include &lt;Adafruit_Sensor.h&gt;
+#include &lt;Adafruit_LSM303_U.h&gt;
+
+/* Beschleunigungssensor und Magnetometer initialisieren */
+Adafruit_LSM303_Accel_Unified accel = Adafruit_LSM303_Accel_Unified(30301);
+Adafruit_LSM303_Mag_Unified   mag   = Adafruit_LSM303_Mag_Unified(30302);
+
+void setup(void) {
+  Serial.begin(115200);
+  
+  if(!accel.begin()) {
+    Serial.println(&quot;Ooops, no LSM303 accelerometer detected ... Check your wiring!&quot;);
+    while(1);
+  }
+  
+  if(!mag.begin()) {
+    Serial.println(&quot;Ooops, no LSM303 magnetometer detected ... Check your wiring!&quot;);
+    while(1);
+  }
+}
+
+void loop(void) {
+  sensors_event_t accel_event;
+  sensors_event_t mag_event;
+  
+  /* Events abrufen */
+  accel.getEvent(&amp;accel_event);
+  mag.getEvent(&amp;mag_event);
+
+  /* Beschleunigung (X, Y, Z) ausgeben */
+  Serial.print(&quot;Ax: &quot;); Serial.print(accel_event.acceleration.x);
+  Serial.print(&quot; | Ay: &quot;); Serial.print(accel_event.acceleration.y);
+  Serial.print(&quot; | Az: &quot;); Serial.print(accel_event.acceleration.z);
+
+  /* Magnetometer (X, Y, Z in Mikro-Tesla uT) ausgeben */
+  Serial.print(&quot; || Mx: &quot;); Serial.print(mag_event.magnetic.x);
+  Serial.print(&quot; | My: &quot;); Serial.print(mag_event.magnetic.y);
+  Serial.print(&quot; | Mz: &quot;); Serial.println(mag_event.magnetic.z);
+  
+  delay(50);
+}</code></pre>
+        </div>
+
+        <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
+            <img
+                src="Output_2nd_sketch.png"
+                alt="Output 2nd sketch"
+                class="w-full h-auto rounded-xl shadow-sm object-contain max-h-[500px] mx-auto"
+                loading="lazy"
+            >
+            <figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
+                📸 Figure 2: Nice, however the legend is somewhat messed up because of the two print commands for each data line
+            </figcaption>
+        </figure>
+
+    </section>
+
+    <section class="space-y-3">
+        <h3 class="text-lg font-bold text-amber-600 dark:text-amber-400 font-mono">
+            1.2 Trouble beginns
+        </h3>
+
+        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+            And now for good measure the gyroscope. Lets go.
+        </p>
+
+        <div class="my-4 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700">
+            <div class="px-4 py-1.5 text-xs font-mono bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300">accelerometer_and_magnetometer_and_gyroscope</div>
+            <pre class="p-4 bg-slate-900 text-slate-100 text-sm leading-relaxed font-mono overflow-x-auto"><code>#include &lt;Wire.h&gt;
+#include &lt;Adafruit_Sensor.h&gt;
+#include &lt;Adafruit_LSM303_U.h&gt;
+#include &lt;Adafruit_L3GD20_U.h&gt;
+
+/* Alle drei Sensoren initialisieren */
+Adafruit_LSM303_Accel_Unified accel = Adafruit_LSM303_Accel_Unified(30301);
+Adafruit_LSM303_Mag_Unified   mag   = Adafruit_LSM303_Mag_Unified(30302);
+Adafruit_L3GD20_Unified       gyro  = Adafruit_L3GD20_Unified(20);
+
+void setup(void) {
+  Serial.begin(115200);
+  
+  if(!accel.begin()) {
+    Serial.println(&quot;Ooops, no LSM303 accelerometer detected ... Check your wiring!&quot;);
+    while(1);
+  }
+  
+  if(!mag.begin()) {
+    Serial.println(&quot;Ooops, no LSM303 magnetometer detected ... Check your wiring!&quot;);
+    while(1);
+  }
+
+  if(!gyro.begin()) {
+    Serial.println(&quot;Ooops, no L3GD20 gyroscope detected ... Check your wiring!&quot;);
+    while(1);
+  }
+}
+
+void loop(void) {
+  sensors_event_t accel_event;
+  sensors_event_t mag_event;
+  sensors_event_t gyro_event;
+  
+  /* Events aller Sensoren abrufen */
+  accel.getEvent(&amp;accel_event);
+  mag.getEvent(&amp;mag_event);
+  gyro.getEvent(&amp;gyro_event);
+
+  /* Beschleunigung (m/s^2) ausgeben */
+  Serial.print(&quot;Ax: &quot;); Serial.print(accel_event.acceleration.x);
+  Serial.print(&quot; | Ay: &quot;); Serial.print(accel_event.acceleration.y);
+  Serial.print(&quot; | Az: &quot;); Serial.print(accel_event.acceleration.z);
+
+  /* Magnetometer (uT) ausgeben */
+  Serial.print(&quot; || Mx: &quot;); Serial.print(mag_event.magnetic.x);
+  Serial.print(&quot; | My: &quot;); Serial.print(mag_event.magnetic.y);
+  Serial.print(&quot; | Mz: &quot;); Serial.print(mag_event.magnetic.z);
+
+  /* Gyroskop (rad/s) ausgeben */
+  Serial.print(&quot; || Gx: &quot;); Serial.print(gyro_event.gyro.x);
+  Serial.print(&quot; | Gy: &quot;); Serial.print(gyro_event.gyro.y);
+  Serial.print(&quot; | Gz: &quot;); Serial.println(gyro_event.gyro.z);
+  
+  delay(50);
+}</code></pre>
+        </div>
+
+        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+            Unfortunateley, here my flow faltered. The gyroscope could not be detected, maybe I should have bought the original and not the cheap china knock off clone. To resolve this I scanned the I2C devices on my board. Low and behold, the I2C adress of my gyro is different from the one on the original board. The quickest fix I could think of is to go to the arduino library and change the adress there <code class="px-1 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono text-[0.85em]">0x6B</code> to the one of my clone <code class="px-1 py-0.5 rounded bg-slate-200 dark:bg-slate-800 font-mono text-[0.85em]">0x69</code>.<br>
+            This however did not work. Maybe my clone uses a different chip. So the next best thing I came up was to ask chatGPT how to talk to the chip directly. Then I simply added this soultion to my code
+        </p>
+
+        <div class="my-4 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700">
+            <div class="px-4 py-1.5 text-xs font-mono bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-300">talking_to_gyro_directly.ino</div>
+            <pre class="p-4 bg-slate-900 text-slate-100 text-sm leading-relaxed font-mono overflow-x-auto"><code>const int GYRO_ADDR = 0x69; 
+
+void setupGyro() {
+  //Begin talking to gyro
+  Wire.beginTransmission(GYRO_ADDR);
+  Wire.write(0x20); // CTRL_REG1
+  Wire.write(0x0F); 
+  Wire.endTransmission();
+
+  // set sensitivity
+  Wire.beginTransmission(GYRO_ADDR);
+  Wire.write(0x23); // CTRL_REG4
+  Wire.write(0x00); 
+  Wire.endTransmission();
+}
+
+void getGyroEvent(sensors_event_t *event) {
+  Wire.beginTransmission(GYRO_ADDR);
+  Wire.write(0x28 | 0x80);
+  Wire.endTransmission();
+  Wire.requestFrom(GYRO_ADDR, 6);
+
+  int16_t raw_gx = 0, raw_gy = 0, raw_gz = 0;
+  if (Wire.available() &gt;= 6) {
+    raw_gx = Wire.read() | (Wire.read() &lt;&lt; 8);
+    raw_gy = Wire.read() | (Wire.read() &lt;&lt; 8);
+    raw_gz = Wire.read() | (Wire.read() &lt;&lt; 8);
+  }
+
+  // Umrechnung in Radiant/s (rad/s) für den Adafruit-Standard
+  float factor = 0.00875 * 0.01745329252; 
+
+  event-&gt;version = 1;
+  event-&gt;sensor_id = 20;
+  event-&gt;type = SENSOR_TYPE_GYROSCOPE;
+  event-&gt;timestamp = millis();
+  
+  event-&gt;gyro.x = raw_gx * factor;
+  event-&gt;gyro.y = raw_gy * factor;
+  event-&gt;gyro.z = raw_gz * factor;
+}</code></pre>
+        </div>
+
+        <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
+            <img
+                src="Output_6th_sketch.png"
+                alt="Output 6th sketch"
+                class="w-full h-auto rounded-xl shadow-sm object-contain max-h-[500px] mx-auto"
+                loading="lazy"
+            >
+            <figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
+                📸 Figure 3: Gyro finally works
+            </figcaption>
+        </figure>
+
+        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+            And as you can see it works, I get lots of noisy lines :)
+        </p>
+
+    </section>
+
+</article>
