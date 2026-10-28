@@ -22,11 +22,11 @@
     </div>
 
     <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-        I found a <a href="https://learn.adafruit.com/adafruit-9-dof-imu-breakout/introduction"<br>
-           target="_blank"<br>
-           rel="noopener noreferrer"<br>
-           class="underline text-amber-600 dark:text-amber-400"><br>
-            9-DoF inertial measurement unit (IMU)<br>
+        I found a <a href="https://learn.adafruit.com/adafruit-9-dof-imu-breakout/introduction"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="underline text-amber-600 dark:text-amber-400">
+            9-DoF inertial measurement unit (IMU)
         </a> breakout board in my drawer. Originally, I wanted to use it for a univerity project, where the IMU detects gait cycles and an electical muscle stimulation unit stimulates the peroneus muscles at the right time during the cycle to prevent ankle sprains. Because we used another board this one ended up in my drawer. <br>
         Now lets use it! Should be easy to read out this old IMU sensor and do some sensor fusion, right?
     </p>
@@ -39,11 +39,11 @@
         <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
             Also the breakout board has lots of pins, we only have to consider four of them, 3.3V, ground, Serial Data Line (SDL) and Serial Clock Line (SCL), to establish a i2c connection and communicate with our sensor. The board has to sensing chips: The LSM303DLHC which features accelerometer and magnetometer and the L3GD20 as a gyroscope. <br>
             To get both of them working you have to install several libraries: Adafruit Unified Sensor Library, LSM303DLHC Library, L3GD20 Library and Adafruit 9DOF Library. <br>
-            Using those I drew up my first sketch while peeking at adafruits <a href="https://github.com/adafruit/Adafruit_9DOF/tree/master"<br>
-               target="_blank"<br>
-               rel="noopener noreferrer"<br>
-               class="underline text-amber-600 dark:text-amber-400"><br>
-                github repository<br>
+            Using those I drew up my first sketch while peeking at adafruits <a href="https://github.com/adafruit/Adafruit_9DOF/tree/master"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="underline text-amber-600 dark:text-amber-400">
+                github repository
             </a>.
         </p>
 
@@ -84,7 +84,7 @@ void loop(void) {
 
         <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
             <img
-                src="Media/Output_1st_sketch.png"
+                src="Media\Output_1st_sketch.png"
                 alt="Output 1st sketch"
                 class="w-full h-auto rounded-xl shadow-sm object-contain max-h-[500px] mx-auto"
                 loading="lazy"
@@ -146,7 +146,7 @@ void loop(void) {
 
         <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
             <img
-                src="Media/Output_2nd_sketch.png"
+                src="Media\Output_2nd_sketch.png"
                 alt="Output 2nd sketch"
                 class="w-full h-auto rounded-xl shadow-sm object-contain max-h-[500px] mx-auto"
                 loading="lazy"
@@ -279,7 +279,7 @@ void getGyroEvent(sensors_event_t *event) {
 
         <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
             <img
-                src="Media/Output_6th_sketch.png"
+                src="Media\Output_6th_sketch.png"
                 alt="Output 6th sketch"
                 class="w-full h-auto rounded-xl shadow-sm object-contain max-h-[500px] mx-auto"
                 loading="lazy"
