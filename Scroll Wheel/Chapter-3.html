@@ -14,61 +14,109 @@
 
     <div class="border-b pb-4 dark:border-slate-700">
         <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white">
-            Chapter 3: Designing a scroll wheel
+            Chapter 3: Further Sensor testing
         </h2>
         <p class="text-sm text-slate-500 dark:text-slate-400 font-mono mt-1">
-            Some quick and dirty CAD modeling
+            3.1 Questions and test setup
         </p>
     </div>
 
+    <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+        To find out how large the individual pads of my scroll wheel need to be I started testing different sizes of sensor pads. Additionally, I wanted to know if it is possible to put a cover on top of the copper tape. So I also tested this case. Therefore, the two main questions I want to answer are: <br>
+        1. What is the influence of copper pad size?<br>
+        2. How does a 1mm thick PLA-cover influence the copper pad sensor?<br>
+        <br>
+        To answer Question (1) I cut five square copper pads of different sizes. The largest edge length was 29 mm, limited by my copper tape's width. the smallest was 10 mm. This resulted in areas between 100 and 841 mm^2. However, keep in mind that I used a box cutter, and all sizes are only approximately accurate. Those copper tape squares were then put on a plywood board. <br>
+        Subsequently, I cut five pieces of solid core wire to the same length (to control for the wires influence) and soldered each to a copper pad. I also printed PLA covers in the right sizes for the copper squares with 1mm thickness.
+    </p>
+
+    <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
+        <img
+            src="Media/SensorSizes.png"
+            alt="test2"
+            class="w-full h-auto rounded-xl shadow-sm object-contain max-h-[500px] mx-auto"
+            loading="lazy"
+        >
+        <figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
+            📸 Figure 1: The copper squares of different sizes with wire soldered to them
+        </figcaption>
+    </figure>
+
+    <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+        For testing, I always connected the wire to D0 to reduce potential influences of the different pins of my Xiao. I always recorded 10 seconds at <strong>20 Hz</strong> and used the middle 6 seconds (=120 values) for my basic analysis using excel. For this middle section I computed the median and standard deviation. <br>
+        I conducted this test for three conditions:<br>
+        (1) touching the bare copper square, (2) touching the PLA cover loosely placed over the copper square, and (3) touching the PLA square taped over the copper square.<br>
+        Additionally I measured a Baseline for all conditions. During those measurements I didn't touch my set up at all. This will further be called <strong>No-Touch</strong>. This will be refered to as <strong>Touch</strong>. Using median values from both conditions a delta can be computed: <strong>Delta = Touch-No-Touch</strong>.
+    </p>
+
     <section class="space-y-3">
         <h3 class="text-lg font-bold text-amber-600 dark:text-amber-400 font-mono">
-            3.1 3D-printed circuit boards
+            3.2 Results without Cover
         </h3>
 
         <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-            With this working sensor pad in hand, I wanted to progress my design into a scroll wheel, 
-            inspired by the early iPods. Those let you scroll through your music library by moving your 
-            finger around a touch sensitive wheel.<br>
-            Since I own a 3D-printer, of course i wanted to use it. After all, if all you have is a 3D-printer, 
-            every problem looks like a nail! I was fairly confident this would work because I'd seen makers use 3D-printers to create
-            <a href="https://hackaday.com/2021/12/06/secret-ingredient-for-3d-printed-circuit-traces-electroplating/"
-               target="_blank"
-               rel="noopener noreferrer"
-               class="underline text-amber-600 dark:text-amber-400">
-                home-brewn circuit boards.
-            </a>
+            The raw signal can be seen in Figure 2. The noise is tiny (SD = 7-10), while the jump when touched is enormous. The SD is also bigger during touch (SD = 420-665). However, a lot of this noise can be explained by my finger. The values seem to somewhat decrease during measurements. I also observed fluctuations when I slightly moved my finger during measurements. Hence, I tried to keep my finger as still as possible.
         </p>
+
+        <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
+            <img
+                src="Media\Raw-Values.png"
+                alt="Raw Values"
+                class="w-full h-auto rounded-xl shadow-sm object-contain max-h-[500px] mx-auto"
+                loading="lazy"
+            >
+            <figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
+                📸 Figure 2: Raw values during Touch and No-Touch. Noise is tiny compared to touch step
+            </figcaption>
+        </figure>
+
+        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
+            While an increase of the area of the copper square increased the Baseline measurement values, this effect was decreasing with increasing size (+809, +464, +279, +182). Possible explanations for this decreasing effect could be the non linear method of measuring capacitance of the ESP32, or some kind of saturation effect. <br>
+            Additionally, it was interessting to see that the Delta between Touch and No-Touch was hardly influenced by pad size (only 1.2% difference). I guess this is because the copper is touched directly and the delta is limited by my body’s capacitance, not by the pad size.
+        </p>
+
+        <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
+            <img
+                src="Media\Baseline_Area.png"
+                alt="Influence of sensor size"
+                class="w-full h-auto rounded-xl shadow-sm object-contain max-h-[500px] mx-auto"
+                loading="lazy"
+            >
+            <figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
+                📸 Figure 3: Influence of sensor size during baseline measurements
+            </figcaption>
+        </figure>
 
     </section>
 
     <section class="space-y-3">
         <h3 class="text-lg font-bold text-amber-600 dark:text-amber-400 font-mono">
-            3.2 CAD Design
+            3.3 Results with cover
         </h3>
 
         <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-            So I opened Fusion 360 and started designing my scroll wheel.<br>
-            The touch wheel has five sensor pads, separated by 1mm wide squiggly line-gaps. 
-            I also designed through-holes so I could solder my solid-core wire to the pads on the front and route the wires 
-            through to the back. To keep everything tidy, I added channels for the wire aong the back side of the part. <br>
-            Finally, I designed a front cover so the copper sensor pads are not touched directly and are somewhat protected.
+            The most obvious change with the cover on is seen in the raw values in figure 2. The delta drops enormously: from ≈ 110,000, without cover to ≈ 2,900-11,300 with cover. So values drop to 3-10% of the bare condition. However, compared to the Touch-SD of the smallest pad (27.8) even the smallest Delta is still considerably larger (around 100 times larger).<br>
+            An additional, less obvious change is the shift of values during baseline measurement. <br>
+            In Figure 3 you can see that all values with the covered conditions (loose and taped) shifted by approximately 400 to 1,000 units compared to the bare condition, growing with pad size. When I discovered this shift, I removed the PLA-covers to see if they caused this shift. However, also without covers there was an obervable shift. However, since the shift grows with pad size, part of it might also be caused by the PLA cover itself, which increases the sensor’s capacitance.<br>
+            I can only explain this to myself like this: <br>
+            While at first I planned to just measure the bare condition during testing I realized that it would be good to test the covered conditions, since this would be the most probable use case anyways. So I quickly 3D-printed the covers, which took maybe 20 to 30 minutes. <br>
+            During this whole time, conditions might have changed. For example the environment temperature or humidity could have changed, also the Xiao was measuring during this whole time period and might have warmed up influencing the measurements. It is well known that capacitance measurements are easily influenced by environmental changes. The increasing shift with increasing pad size could be caused by an increased capacitance of the sensor induced by the PLA-cover itself. I made a mental note and set it aside for now<br>
+            <br>
+            And finally, is there a influence of pad size with cover?<br>
+            Look at figure 4! Something is obviously going on here. now the Delta increases distinctly with increasing pad size. For the loose cover it increases from 2.7% of the bare delta at the smallest pad to 9.2% of the bare pad for the largest pad. With taped down covers those values are very comparable.<br>
+            How is this possible? The PLA cover might act as a capacitor in series. The coupling capacitance between my finger and the copper pad through the PLA is now the bottle-neck. The larger the pad, the better the coupling. <br>
+            The double sided tape between copper and PLA had barely any effect. The delta was slightly higher, but this could also be attributed to something else like changes in temperature or simply noise.
         </p>
 
         <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
-            <div class="aspect-video w-full rounded-xl overflow-hidden bg-black">
-                <video
-                    controls
-                    playsinline
-                    preload="metadata"
-                    class="w-full h-full object-contain"
-                >
-                    <source src="Scroll Wheel/Media/Unbenanntes Projekt.mp4" type="video/mp4">
-                    Your browser does not support this video format.
-                </video>
-            </div>
+            <img
+                src="Media\Delta.png"
+                alt="Delta"
+                class="w-full h-auto rounded-xl shadow-sm object-contain max-h-[500px] mx-auto"
+                loading="lazy"
+            >
             <figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
-                🎥 Video 1: CAD Design
+                📸 Figure 4: The change of measured median touch raw values compared to baseline. Whiskers are one SD.
             </figcaption>
         </figure>
 
@@ -76,82 +124,19 @@
 
     <section class="space-y-3">
         <h3 class="text-lg font-bold text-amber-600 dark:text-amber-400 font-mono">
-            3.3 Assembly
+            3.4 Learnings
         </h3>
 
         <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-            After 3D-printing both parts, I applied copper tape to the front. This went very smooth because i could use the edges of my 3D-printed part as a cutting guide for the tape.
+            1. Without cover, the pad-size is negligible for change in delta<br>
+            2. With cover, pad size matters. However, the gain gets smaller for larger pads, possibly because my finger only covers part of the larger pads.<br>
+            3. The cover swallows 90 to 97% of the signal, but even the smallest pad is sufficient for a reliable touch detection. <br>
+            4. The baseline drifts! I need a baseline compensation in my code for the scroll wheel.<br>
+            <br>
+            Further thoughts: <br>
+            If I want to increase the delta, I could design the cover a little thinner, or test different materials. <br>
+            To achieve more reliable results I could use more measurements (longer periods and/or multiple touches) per pad size and condition, and of course have the covers ready before testing so conditions are approximately the same during all tests. Taking it a step further one could also controll finger pressure
         </p>
-
-        <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
-            <img
-                src="Scroll Wheel/Media/assembly.gif"
-                alt="assembly"
-                class="w-full h-auto rounded-xl shadow-sm object-contain max-h-[500px] mx-auto"
-                loading="lazy"
-            >
-            <figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
-                📸 Figure 1: Applying the copper tape
-            </figcaption>
-        </figure>
-
-        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-            However, I messed up the through holes a little. To be honest, I had to redesign and print the parts a scond time, 
-            because in the first version tolerances were to tight. For the second itearation, I enlarged the throughholes without 
-            giving it much thought. This left very little material between the through-holes and the edges of the sensor pads, causing the copper tape to tear in those spots. <br>
-            But since I wanted to see quick results, I carried on anyway, telling myself that I’d fix it in the next iteration 
-            (we’ll see if that actually happens ;)).
-        </p>
-
-
-        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-            But the mistakes didn’t stop there. My string of errors continued with the cover. 
-            Because the copper tape had torn, I had to bend the wires a little to get them soldered in place. 
-            As a result, they now ended up in slightly different spots than originally planned. Unfortunately, 
-            that meant the cutouts in the cover, which I had thoughtfully planned in advance, no longer lined up with my soldering joints.
-        </p>
-
-        <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
-            <img
-                src="Scroll Wheel/Media/bad_fit.png"
-                alt="Bad fit of my scroll wheel cover"
-                class="w-full h-auto rounded-xl shadow-sm object-contain max-h-[500px] mx-auto"
-                loading="lazy"
-            >
-            <figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
-                📸 Figure 3: The fit of my recesses isnot optimal
-            </figcaption>
-        </figure>
-
-        <p class="text-slate-700 dark:text-slate-300 text-sm leading-relaxed">
-            Finally, since the tollerances of the channels for my wiring were also off, 
-            I had to design a last part: A spacer ring that I glued to the underside of my sensor wheel. 
-            This gave me a flat surface that could be taped down to my desk with double-sided tape.
-        </p>
-
-        <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
-            <img
-                src="Scroll Wheel/Media/KlickWheel.png"
-                alt="All CAD parts"
-                class="w-full h-auto rounded-xl shadow-sm object-contain max-h-[500px] mx-auto"
-                loading="lazy"
-            >
-            <figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
-                📸 Figure 4: Overview of all designed parts
-            </figcaption>
-        </figure>
-
-        <figure class="my-4 bg-slate-50 dark:bg-slate-900 p-3 rounded-2xl border border-slate-200 dark:border-slate-700">
-            <img
-                src="Scroll Wheel/Media/final_assembly.png"
-                alt="final assembly"
-                class="w-full h-auto rounded-xl shadow-sm object-contain max-h-[500px] mx-auto"
-                loading="lazy"
-            >
-            <figcaption class="text-center text-xs font-mono text-slate-500 dark:text-slate-400 mt-2">
-                📸 Figure 5: The final assembly
-            </figcaption>
-        </figure>
 
     </section>
 
